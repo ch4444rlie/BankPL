@@ -1,0 +1,66 @@
+{
+    "margin": 36,
+    "section_spacing": 20,
+    "sections": [
+      {
+        "type": "header",
+        "title": "{account_type} Statement",
+        "font": "Helvetica-Bold",
+        "font_size": 22,
+        "show_logo": true,
+        "logo_width": 68.76,
+        "logo_height": 23.04,
+        "spacing": 30
+      },
+      {
+        "type": "account_info",
+        "layout": "two_column",
+        "fields": [
+          "account_holder",
+          "customer_account_number",
+          "statement_period",
+          "customer_iban",
+          "client_number",
+          "date_of_birth"
+        ],
+        "font": "Helvetica",
+        "font_size": 12,
+        "line_spacing": 12,
+        "section_spacing": 20
+      },
+      {
+        "type": "text_block",
+        "text": "Important Information: Effective July 1, 2025, the monthly service fee for {account_type} accounts will increase to {currency}10 unless you maintain a minimum daily balance of {currency}1,500 or have qualifying direct deposits of {currency}500 or more per month. For questions, visit our website or call our Customer Service at 1-800-555-1234, available 24/7.",
+        "font": "Helvetica",
+        "font_size": 12,
+        "line_spacing": 12,
+        "section_spacing": 20
+      },
+      {
+        "type": "transactions",
+        "columns": [
+          {"field": "date", "label": "Date", "width": 0.15, "align": "left"},
+          {"field": "description", "label": "Description", "width": 0.36, "align": "left"},
+          {"field": "debit", "label": "Debit", "width": 0.12, "align": "right"},
+          {"field": "credit", "label": "Credit", "width": 0.12, "align": "right"},
+          {"field": "balance", "label": "Balance", "width": 0.12, "align": "right"}
+        ],
+        "row_limit": 10,
+        "font": "Helvetica",
+        "font_size": 10,
+        "header_font": "Helvetica-Bold",
+        "header_font_size": 12,
+        "row_height": 12,
+        "line_thickness": 1,
+        "section_spacing": 20
+      },
+      {
+        "type": "text_block",
+        "text": "Disclosures: All account transactions are subject to the {bank_name} Account Agreement. Interest rates and APYs may change without notice. For overdraft information, visit our website or call 1-800-555-1234.",
+        "font": "Helvetica",
+        "font_size": 10,
+        "line_spacing": 12,
+        "section_spacing": 20
+      }
+    ]
+  }

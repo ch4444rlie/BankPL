@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ account_type }} Statement</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      font-size: 12px; /* Increased from 9px to 12px for better readability */
+    }
+    .header-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px; /* Increased margin for better spacing */
+      
+    }
+    .header-table td {
+      vertical-align: top;
+      padding: 10px; /* Increased padding for larger boxes */
+    }
+    .customer-service {
+    /* Customer-service two-column table (aligned to the right edge) */
+    .cs-table          { border-collapse: collapse; margin-top: 10px;
+                        width: 360px;       /* keep or drop as you wish          */
+                        margin-left: auto;  /* ⬅️  pushes the table fully right  */
+    }
+    .cs-table thead th { border-top: 3px solid #000; border-bottom: 3px solid #000;
+                        font-size: 12px; font-weight: bold; text-transform: uppercase;
+                        padding: 6px 0; text-align: left; }
+    .cs-table td       { font-size: 12px; padding: 4px 0; }
+    .cs-table td:first-child { text-align: left;  }
+    .cs-table td.val         { text-align: right; }
+
+    }
+    .cs-box {
+      display: inline-block;
+      text-align: left;
+      padding: 10px; /* Increased padding for larger box */
+    }
+    .cs-header {
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 12px; /* Increased from 9px to match body */
+      border-top: 3px solid #000;
+      border-bottom: 3px solid #000;
+      padding: 5px 10px; /* Increased padding to prevent spill */
+      margin: 0;
+      width: 100%; /* Ensure it stays within box */
+      box-sizing: border-box;
+    }
+    .cs-content {
+      margin-top: 10px; /* Increased margin for spacing */
+      line-height: 1.5; /* Increased for readability */
+      padding-left: 10px; /* Increased padding */
+      text-align: left;
+    }
+    .date-range {
+      font-weight: bold;
+      margin-bottom: 10px; /* Increased margin */
+    }
+    .account-number {
+      margin-bottom: 15px; /* Increased margin */
+    }
+    .section-divider {
+      position: relative;
+      margin: 40px 0 0; /* Increased margin for better separation */
+    }
+    .section-header {
+      display: inline-block;
+      border: 2px solid #000; /* Thickened border for visibility */
+      padding: 6px 12px; /* Increased padding to contain larger text */
+      margin-top: -2px; /* Adjusted to align with thicker border */
+      background: #fff;
+      position: relative;
+      z-index: 1;
+      box-sizing: border-box; /* Ensure padding doesn't overflow */
+      min-width: 150px; /* Minimum width to prevent spill */
+    }
+    .section-header h2 {
+      margin: 0;
+      font-size: 14px; /* Increased from 11px for headers */
+      font-weight: bold;
+      text-transform: uppercase;
+      white-space: nowrap; /* Prevent text wrapping */
+    }
+    .section-divider::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      border-top: 2px solid #000; /* Thickened line */
+      transform: translateY(-50%);
+      z-index: 0;
+    }
+    .summary-table {
+      width: 60%; /* Increased width for better layout */
+      border-collapse: collapse;
+      margin-left: 0;
+      margin-bottom: 40px; /* Increased margin */
+    }
+    .summary-table th,
+    .summary-table td {
+      border: none;
+      padding: 6px; /* Increased padding */
+      text-align: left;
+    }
+    .summary-table th:nth-child(1),
+    .summary-table td:nth-child(1) {
+      text-align: left;
+      width: 40%;
+    }
+    .summary-table th:nth-child(2),
+    .summary-table td:nth-child(2) {
+      text-align: left;
+      width: 30%;
+      padding-left: 30px; /* Increased padding */
+    }
+    .summary-table th:nth-child(3),
+    .summary-table td:nth-child(3) {
+      text-align: left;
+      width: 30%;
+      padding-left: 30px; /* Increased padding */
+    }
+    .summary-table th {
+      font-weight: bold;
+      font-size: 12px; /* Match body text */
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px; /* Increased margin */
+      table-layout: fixed;
+    }
+    .data-table th,
+    .data-table td {
+      border: none;
+      padding: 6px; /* Increased padding */
+    }
+    .data-table tr.date-row td {
+      border-bottom: 2px solid #000; /* Thickened border */
+    }
+    .data-table th:nth-child(1),
+    .data-table td:nth-child(1) { width: 15%; text-align: left; }
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2) { width: 70%; text-align: left; }
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) { width: 15%; text-align: right; }
+    .balance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px; /* Increased margin */
+      table-layout: fixed;
+    }
+    .balance-table th,
+    .balance-table td {
+      border: none;
+      padding: 6px; /* Increased padding */
+    }
+    .balance-table th:nth-child(1),
+    .balance-table td:nth-child(1) { width: 50%; text-align: left; }
+    .balance-table th:nth-child(2),
+    .balance-table td:nth-child(2) { width: 50%; text-align: left; }
+    .footnotes {
+      margin-top: 40px; /* Increased margin */
+      font-size: 10px; /* Increased from 7px for readability */
+      line-height: 1.5; /* Increased for readability */
+    }
+    .important-info p {
+      font-size: 12px; /* Increased to match body text */
+      line-height: 1.5; /* Increased for readability */
+      margin: 10px 0; /* Increased margin */
+    }
+    hr.section-rule {
+      border: 0;
+      height: 2px; /* Thickened line */
+      background: #000;
+      margin: 15px 0; /* Increased margin */
+    }
+    /* ─── TOP HEADER ROW ──────────────────────────────────────────── */
+.header-table          { width: 100%; table-layout: fixed; }
+
+/* left cell (logo + bank address) gets ≈60 % of the line */
+.header-table td:first-child { width: 60%; }
+
+/* right cell (date range + account # + CS table) stays right-aligned */
+.header-table td.customer-service {
+    width: 40%;          /* whatever is left; keep this smaller than 60 % */
+    text-align: right;
+}
+
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+<table class="header-table">
+  <tr>
+    <td>
+      {% if logo_path %}
+      <img src="{{ logo_path }}" alt="Chase Logo" width="120"><br> <!-- Increased width for visibility -->
+      {% endif %}
+      JPMorgan Chase Bank, N.A.<br>
+      PO Box 659754<br>
+      San Antonio, TX 78265-9754
+    </td>
+<!-- CUSTOMER-SERVICE (aligned 2×5 table) -->
+<td class="customer-service">
+    <div class="date-range">{{ statement_period }}</div>
+    <div class="account-number">Account Number: {{ account_number }}</div>
+  
+    <table class="cs-table">
+      <thead>
+        <tr><th colspan="2">CUSTOMER SERVICE INFORMATION</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Web&nbsp;site:</td>          <td class="val">chase.com</td></tr>
+        <tr><td>Service&nbsp;Center:</td>    <td class="val">1-800-242-7338</td></tr>
+        <tr><td>Hearing&nbsp;Impaired:</td>  <td class="val">1-800-242-7383</td></tr>
+        <tr><td>Para&nbsp;Español:</td>      <td class="val">1-888-622-4273</td></tr>
+        <tr><td>International&nbsp;Calls:</td><td class="val">1-713-262-1679</td></tr>
+      </tbody>
+    </table>
+  </td>
+  
+  </tr>
+</table>
+
+<!-- PAYEE INFO -->
+<div>
+  <strong>
+    {{ account_holder }}<br>
+    {{ account_holder_address }}
+  </strong>
+</div>
+
+<!-- IMPORTANT ACCOUNT INFORMATION -->
+<div class="section-divider">
+  <div class="section-header"><h2>Important Account Information</h2></div>
+</div>
+<div class="important-info">
+  {% if account_type == "Chase Total Checking" %}
+  <p>Effective July 1, 2025, the monthly service fee for Chase Total Checking accounts will increase to $15 unless you maintain a minimum daily balance of $1,500, have $500 in qualifying direct deposits, or maintain a linked Chase savings account with a balance of $5,000 or more.</p>
+  <p>Starting June 30, 2025, Chase will introduce real-time transaction alerts for Chase Total Checking accounts via the Chase Mobile app to enhance account monitoring. Enable alerts at chase.com/alerts.</p>
+  <p>Effective July 15, 2025, Chase will waive overdraft fees for transactions of $5 or less and cap daily overdraft fees at two per day for Chase Total Checking accounts.</p>
+  {% else %}
+  <p>Effective July 1, 2025, the monthly service fee for Chase Business Complete Checking accounts will increase to $20 unless you maintain a minimum daily balance of $2,000, have $2,000 in net purchases on a Chase Business Debit Card, or maintain linked Chase business accounts with a combined balance of $10,000.</p>
+  <p>Starting June 30, 2025, Chase will offer enhanced cash flow tools for Chase Business Complete Checking accounts via Chase Online, including automated invoice tracking and payment scheduling.</p>
+  <p>Effective July 15, 2025, Chase will reduce wire transfer fees to $25 for domestic transfers for Chase Business Complete Checking accounts, down from $30.</p>
+  {% endif %}
+  <p>For questions about your account or these changes, please visit chase.com or contact our Customer Service team at <b>1-800-242-7338</b>, available 24/7.</p>
+</div>
+
+<!-- CHECKING SUMMARY -->
+<div class="section-divider">
+  <div style="text-align: center; margin: 0 auto; margin-bottom: -15px; max-width: 100%;"> <!-- Increased margin-bottom -->
+    {{ account_type }}
+  </div>
+  <div class="section-header"><h2>Checking Summary</h2></div>
+</div>
+<table class="summary-table">
+  <tr>
+    <th></th>
+    <th>Instances</th>
+    <th>Amount</th>
+  </tr>
+  <tr>
+    <td>Beginning Balance</td>
+    <td>–</td>
+    <td>{{ summary.beginning_balance }}</td>
+  </tr>
+  <tr>
+    <td>Deposits and Additions</td>
+    <td>{{ summary.deposits_count }}</td>
+    <td>{{ summary.deposits_total }}</td>
+  </tr>
+  <tr>
+    <td>Electronic Withdrawals</td>
+    <td>{{ summary.withdrawals_count }}</td>
+    <td>{{ summary.withdrawals_total }}</td>
+  </tr>
+  <tr>
+    <td>Ending Balance</td>
+    <td>{{ summary.transactions_count }}</td>
+    <td>{{ summary.ending_balance }}</td>
+  </tr>
+</table>
+<p>
+  {% if show_fee_waiver %}
+  {% if account_type == "Chase Total Checking" %}
+  Your monthly service fee was waived because you maintained an average checking balance of $1,500 or had qualifying direct deposits totaling $500 or more during the statement period.
+  {% else %}
+  Your monthly service fee was waived because you maintained an average checking balance of $10,000 or had $2,500 in qualifying direct deposits during the statement period.
+  {% endif %}
+  {% endif %}
+</p>
+
+<!-- DEPOSITS AND ADDITIONS -->
+<!-- DEPOSITS AND ADDITIONS -->
+<div class="section-divider">
+  <div class="section-header"><h2>Deposits and Additions</h2></div>
+</div>
+<table class="data-table">
+  <tr>
+    <th>Date</th>
+    <th>Description</th>
+    <th>Amount</th>
+  </tr>
+  {% for deposit in deposits %}
+  <tr class="date-row">
+    <td>{{ deposit.date }}</td>
+    <td>{{ deposit.description }}</td>
+    <td>{{ deposit.amount }}</td>
+  </tr>
+  {% endfor %}
+  {% if not deposits %}
+  <tr>
+    <td colspan="3">No deposits for this period.</td>
+  </tr>
+  {% endif %}
+  <tr>
+    <td colspan="2"><strong>Total Deposits and Additions</strong></td>
+    <td style="text-align: right;">{{ summary.deposits_total }}</td>
+  </tr>
+</table>
+
+<!-- WITHDRAWALS -->
+<div class="section-divider">
+  <div class="section-header"><h2>Withdrawals</h2></div>
+</div>
+<table class="data-table">
+  <tr>
+    <th>Date</th>
+    <th>Description</th>
+    <th>Amount</th>
+  </tr>
+  {% for withdrawal in withdrawals %}
+  <tr class="date-row">
+    <td>{{ withdrawal.date }}</td>
+    <td>{{ withdrawal.description }}</td>
+    <td>{{ withdrawal.amount }}</td>
+  </tr>
+  {% endfor %}
+  {% if not withdrawals %}
+  <tr>
+    <td colspan="3">No withdrawals for this period.</td>
+  </tr>
+  {% endif %}
+  <tr>
+    <td colspan="2"><strong>Total Electronic Withdrawals</strong></td>
+    <td style="text-align: right;">{{ summary.withdrawals_total }}</td>
+  </tr>
+</table>
+
+<!-- DAILY ENDING BALANCE -->
+<div class="section-divider">
+  <div class="section-header"><h2>Daily Ending Balance</h2></div>
+</div>
+
+<table class="balance-table">
+  <colgroup><col style="width:50%;"><col style="width:50%;"></colgroup>
+  <thead>
+    <tr><th>Date</th><th class="num">Amount</th></tr>
+  </thead>
+  <tbody>
+    {#--  initialise running-balance with the beginning balance  --#}
+    {% set bal = summary.beginning_balance %}
+
+    {#--  iterate over every day in the cycle  --#}
+    {% for n in range((statement_end - statement_start).days + 1) %}
+      {% set this_day = (statement_start + n*day_delta).strftime("%m/%d") %}
+      {% if (statement_start + n*day_delta).isoformat() in balance_map %}
+          {% set bal = balance_map[(statement_start + n*day_delta).isoformat()] %}
+      {% endif %}
+      <tr>
+        <td>{{ this_day }}</td>
+        <td class="num">{{ bal }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<!-- FOOTNOTES AND DISCLOSURES -->
+<div class="footnotes">
+  <p style="font-size: 10px; font-weight: normal; line-height: 1.5; margin-bottom: 10px;">Disclosures</p>
+  <p>All account transactions are subject to the Chase Deposit Account Agreement, available at chase.com. Interest rates and Annual Percentage Yields (APYs) may change without notice. For details on overdraft policies and fees, visit chase.com/overdraft or call 1-800-242-7338.</p>
+  <p>JPMorgan Chase Bank, N.A. is a Member FDIC. Equal Housing Lender.</p>
+</div>
+</body>
+</html>
