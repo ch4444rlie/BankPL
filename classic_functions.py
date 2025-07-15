@@ -1090,3 +1090,91 @@ def create_pnc_classic(ctx, output_buffer):
         c.drawString(margin, y_position, f"YTD interest paid: {format_text(ctx.get('summary', {}).get('interest_paid_ytd', '$0.00'), ctx)}")
         y_position -= 20
         c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        
+        # Activity Detail
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, MIN_SPACE_FOR_TABLE, "Helvetica", 15)
+        y_position -= 14
+        c.setFont("Helvetica", 15)
+        c.drawString(margin, y_position, "Activity Detail")
+        y_position -= 14
+        
+        c.setFont("Helvetica", 12)
+        amount_header_width = c.stringWidth("Amount", "Helvetica", 12)
+        amount_x = margin + 0.15 * usable_width + amount_header_width
+        
+        # Deposits & Other Additions
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, MIN_SPACE_FOR_TABLE, "Helvetica", 13)
+        c.setFont("Helvetica", 13)
+        c.drawString(margin, y_position, "Deposits & Other Additions")
+        y_position -= 10
+        c.setFont("Helvetica", 12)
+        c.drawString(margin, y_position, "Date")
+        c.drawString(margin + 0.15 * usable_width, y_position, "Amount")
+        c.drawString(margin + 0.35 * usable_width, y_position, "Description")
+        y_position -= 12
+        c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        for deposit in ctx.get('deposits', []):
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 12, "Helvetica", 12)
+            c.drawString(margin, y_position, format_text(deposit.get("date", ""), ctx))
+            c.drawRightString(amount_x, y_position, format_text(deposit.get("credit", ""), ctx))
+            c.drawString(margin + 0.35 * usable_width, y_position, format_text(deposit.get("description", ""), ctx))
+            if not deposit.get("credit"):
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Deposit missing 'credit' field: {deposit}"]
+            y_position -= 12
+        y_position -= 12
+        c.setFont("Helvetica", 10.5)
+        c.drawString(margin, y_position, f"There are {format_text(ctx['summary']['deposits_count'], ctx)} deposits totaling {format_text(ctx['summary']['deposits_total'], ctx)}.")
+        y_position -= 20
+        
+        # Checks & Other Deductions
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, MIN_SPACE_FOR_TABLE, "Helvetica", 13)
+        c.setFont("Helvetica", 13)
+        c.drawString(margin, y_position, "Checks & Other Deductions")
+        y_position -= 10
+        c.setFont("Helvetica", 12)
+        c.drawString(margin, y_position, "Date")
+        c.drawString(margin + 0.15 * usable_width, y_position, "Amount")
+        c.drawString(margin + 0.35 * usable_width, y_position, "Description")
+        y_position -= 12
+        c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        for withdrawal in ctx.get('withdrawals', []):
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 12, "Helvetica", 12)
+            c.drawString(margin, y_position, format_text(withdrawal.get("date", ""), ctx))
+            c.drawRightString(amount_x, y_position, format_text(withdrawal.get("debit", ""), ctx))
+            c.drawString(margin + 0.35 * usable_width, y_position, format_text(withdrawal.get("description", ""), ctx))
+            if not withdrawal.get("debit"):
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Withdrawal missing 'debit' field: {withdrawal}"]
+            y_position -= 12
+        y_position -= 12
+        c.setFont("Helvetica", 10.5)
+        c.drawString(margin, y_position, f"There are {format_text(ctx['summary']['withdrawals_count'], ctx)} withdrawals totaling {format_text(ctx['summary']['withdrawals_total'], ctx)}.")
+        y_position -= 20
+        c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        
+        # Disclosures
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 60, "Helvetica", 11)
+        y_position -= 14
+        c.setFont("Helvetica", 11)
+        c.drawString(margin, y_position, "Disclosures")
+        y_position -= 14
+        c.setFont("Helvetica", 12)
+        disclosures_text = (
+            "All account transactions are subject to the PNC Consumer Funds Availability Policy and Account Agreement, available at pnc.com. "
+            "Interest rates and Annual Percentage Yields (APYs) may change without notice. For overdraft information, visit pnc.com/overdraft or call 1-888-762-2265."
+        )
+        wrapped_disclosures = wrap_text(c, format_text(disclosures_text, ctx), "Helvetica", 12, usable_width)
+        for line in wrapped_disclosures:
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 12, "Helvetica", 12)
+            c.drawString(margin, y_position, line)
+            y_position -= 12
+        y_position -= 12
+        c.drawString(margin, y_position, "PNC Bank, National Association, Member FDIC • Equal Housing Lender.")
+        
+        c.save()
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] PDF generated for {bank_name}"]
+    except ValueError as e:
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Error in create_pnc_classic: {str(e)}"]
+        raise
+    except Exception as e:
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Unexpected error in create_pnc_classic: {str(e)}"]
+        raise
