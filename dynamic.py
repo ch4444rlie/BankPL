@@ -13,10 +13,10 @@ from classic_functions import wrap_text, check_page_break
 PROFESSIONAL_FONTS = ["Helvetica", "Times-Roman", "Courier"]
 PROFESSIONAL_COLORS = [colors.black, colors.HexColor("#333333"), colors.HexColor("#000066")]
 
-def get_random_text_style(is_heading=False):
+def get_random_text_style(is_heading=False, base_size=10):
     """Return a randomized but professional font, size, and color."""
     font = random.choice(PROFESSIONAL_FONTS)
-    size = random.randint(12, 16) if is_heading else random.randint(8, 12)
+    size = base_size + 2 if is_heading else base_size - 3 if is_heading == "footer" else base_size
     color = random.choice(PROFESSIONAL_COLORS)
     return {"font": font, "size": size, "color": color}
 
@@ -86,10 +86,14 @@ def create_dynamic_statement(ctx, output_buffer):
         y_position = PAGE_HEIGHT - margin
 
         # Set consistent document-wide text styles
-        doc_style = get_random_text_style(is_heading=False)
-        header_style = get_random_text_style(is_heading=True)
-        header_style["font"] = doc_style["font"]  # Same font for consistency
-        header_style["color"] = doc_style["color"]  # Same color for consistency
+        base_size = random.randint(8, 12)
+        doc_style = get_random_text_style(is_heading=False, base_size=base_size)
+        header_style = get_random_text_style(is_heading=True, base_size=base_size)
+        footer_style = get_random_text_style(is_heading="footer", base_size=base_size)
+        header_style["font"] = doc_style["font"]
+        header_style["color"] = doc_style["color"]
+        footer_style["font"] = doc_style["font"]
+        footer_style["color"] = doc_style["color"]
 
         # Local helper function for text formatting
         def format_text(value, ctx):
@@ -124,7 +128,7 @@ def create_dynamic_statement(ctx, output_buffer):
             except Exception as e:
                 print(f"Warning: Failed to render logo for {bank_name}: {e}")
                 st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Failed to render logo for {bank_name}: {e}"]
-                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, doc_style["font"], doc_style["size"])
+                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, doc_style["size"] + 4, doc_style["font"], doc_style["size"])
                 c.setFont(doc_style["font"], doc_style["size"])
                 c.setFillColor(doc_style["color"])
                 c.drawString(margin, y_position, f"[Logo: {bank_name}]")
@@ -132,7 +136,7 @@ def create_dynamic_statement(ctx, output_buffer):
         else:
             print(f"Warning: Logo path not provided for {bank_name}")
             st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Logo path not provided for {bank_name}"]
-            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, doc_style["font"], doc_style["size"])
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, doc_style["size"] + 4, doc_style["font"], doc_style["size"])
             c.setFont(doc_style["font"], doc_style["size"])
             c.setFillColor(doc_style["color"])
             c.drawString(margin, y_position, f"[Logo: {bank_name}]")
@@ -213,7 +217,7 @@ def create_dynamic_statement(ctx, output_buffer):
                 }
             ]
             if bank_name.lower() == 'wells fargo':
-                middle_sections.insert(0, {
+                middle_sections.append({
                     "title": "Your Wells Fargo",
                     "content": [{
                         "type": "text",
@@ -229,11 +233,10 @@ def create_dynamic_statement(ctx, output_buffer):
                     }]
                 })
             if bank_name.lower() == 'pnc':
-                middle_sections.insert(2, {
+                middle_sections.append({
                     "title": "Transaction and Interest Summary",
                     "content": [{
                         "type": "table",
-                        "data_key": "transaction_and_interest_summary",
                         "data": [
                             ["Transaction Summary", "", "", ""],
                             ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0"), "", ""],
@@ -269,6 +272,7 @@ def create_dynamic_statement(ctx, output_buffer):
                         "style": "none"
                     }]
                 })
+            random.shuffle(middle_sections)
 
         # Render middle sections
         if layout_style == 'sequential':
@@ -283,10 +287,10 @@ def create_dynamic_statement(ctx, output_buffer):
                         section["content"][0].get("col_widths", [0.75, 0.25])
                     )
                     table_width = sum(col_widths)
-                    box_height = (len(section["content"][0]["data"]) * (doc_style["size"] + 4) + 30 + 12)  # Increased height
+                    box_height = (len(section["content"][0]["data"]) * (doc_style["size"] + 4) + 30 + 12)
                     c.setFillColor(colors.HexColor("#D3D3D3"))
                     c.setStrokeColor(colors.black)
-                    c.rect(margin - 8, y_position - 20 - 4.5 * (doc_style["size"] + 4), table_width + 16, box_height, fill=1, stroke=1)
+                    c.rect(margin - 8, y_position - box_height + header_style["size"] + 4, table_width + 16, box_height, fill=1, stroke=1)
                     c.setFillColor(header_style["color"])
                     c.setStrokeColor(colors.black)
                     c.drawString(margin + 8, y_position, section["title"])
@@ -348,14 +352,18 @@ def create_dynamic_statement(ctx, output_buffer):
                         header_height = doc_style["size"] + 4 if headers else 0
 
                         if headers and y_position - (header_height + row_height) >= margin:
+                            c.setFont(header_style["font"], header_style["size"])
+                            c.setFillColor(header_style["color"])
                             for i, header in enumerate(headers):
                                 x_pos = margin + sum(col_widths[:i])
                                 if i in [2, 3] and section["title"] in ["Transaction History", "Daily Ending Balance"]:
                                     c.drawRightString(x_pos + col_widths[i] - 8, y_position, header)
                                 else:
                                     c.drawString(x_pos + 8, y_position, header)
-                            y_position -= doc_style["size"] + 4
+                            y_position -= header_style["size"] + 4
                         
+                        c.setFont(doc_style["font"], doc_style["size"])
+                        c.setFillColor(doc_style["color"])
                         for row in data:
                             y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, row_height, doc_style["font"], doc_style["size"], 
                                                          is_table=(section["title"] in ["Transaction History", "Daily Ending Balance"]), 
@@ -386,6 +394,7 @@ def create_dynamic_statement(ctx, output_buffer):
             for i, section in enumerate(middle_sections):
                 col_x = margin if i % 2 == 0 else margin + col_width + 20
                 current_y_position = left_y_position if i % 2 == 0 else right_y_position
+                current_y_position = check_page_break(c, current_y_position, margin, PAGE_HEIGHT, header_style["size"] + 4, header_style["font"], header_style["size"])
                 c.setFont(header_style["font"], header_style["size"])
                 c.setFillColor(header_style["color"])
                 if section["title"] == "Account Summary":
@@ -398,7 +407,7 @@ def create_dynamic_statement(ctx, output_buffer):
                     box_height = (len(section["content"][0]["data"]) * (doc_style["size"] + 4) + 30 + 12)
                     c.setFillColor(colors.HexColor("#D3D3D3"))
                     c.setStrokeColor(colors.black)
-                    c.rect(col_x - 8, current_y_position - 20 - 4.5 * (doc_style["size"] + 4), table_width + 16, box_height, fill=1, stroke=1)
+                    c.rect(col_x - 8, current_y_position - box_height + header_style["size"] + 4, table_width + 16, box_height, fill=1, stroke=1)
                     c.setFillColor(header_style["color"])
                     c.setStrokeColor(colors.black)
                     c.drawString(col_x + 8, current_y_position, section["title"])
@@ -457,17 +466,21 @@ def create_dynamic_statement(ctx, output_buffer):
                         col_widths = calculate_dynamic_col_widths(data, col_width, content.get("col_widths", [1/len(data[0])]*len(data[0])))
                         headers = content.get("headers", [])
                         row_height = doc_style["size"] + 4
-                        header_height = doc_style["size"] + 4 if headers else 0
-                        
+                        header_height = header_style["size"] + 4 if headers else 0
+
                         if headers and current_y_position - (header_height + row_height) >= margin:
+                            c.setFont(header_style["font"], header_style["size"])
+                            c.setFillColor(header_style["color"])
                             for i, header in enumerate(headers):
                                 x_pos = col_x + sum(col_widths[:i])
                                 if i in [2, 3] and section["title"] in ["Transaction History", "Daily Ending Balance"]:
                                     c.drawRightString(x_pos + col_widths[i] - 8, current_y_position, header)
                                 else:
                                     c.drawString(x_pos + 8, current_y_position, header)
-                            current_y_position -= doc_style["size"] + 4
+                            current_y_position -= header_style["size"] + 4
                         
+                        c.setFont(doc_style["font"], doc_style["size"])
+                        c.setFillColor(doc_style["color"])
                         for row in data:
                             current_y_position = check_page_break(c, current_y_position, margin, PAGE_HEIGHT, row_height, doc_style["font"], doc_style["size"], 
                                                                  is_table=True, headers=headers, col_widths=col_widths)
@@ -497,11 +510,11 @@ def create_dynamic_statement(ctx, output_buffer):
                 y_position = min(left_y_position, right_y_position)
 
         # Render Footer
-        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 60, doc_style["font"], doc_style["size"])
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 60, footer_style["font"], footer_style["size"])
         c.setStrokeColor(colors.black)
         c.line(margin, y_position + 20, margin + usable_width, y_position + 20)
-        c.setFont(doc_style["font"], doc_style["size"])
-        c.setFillColor(doc_style["color"])
+        c.setFont(footer_style["font"], footer_style["size"])
+        c.setFillColor(footer_style["color"])
         lines = wrap_text(
             c,
             format_text(
@@ -511,14 +524,14 @@ def create_dynamic_statement(ctx, output_buffer):
                 f"© 2025 {bank_name} Bank, N.A. All rights reserved. Member FDIC.",
                 ctx
             ),
-            doc_style["font"],
-            doc_style["size"],
+            footer_style["font"],
+            footer_style["size"],
             usable_width
         )
         for line in lines:
-            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, doc_style["size"] + 2, doc_style["font"], doc_style["size"])
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, footer_style["size"] + 2, footer_style["font"], footer_style["size"])
             c.drawString(margin + 8, y_position, line)
-            y_position -= doc_style["size"] + 2
+            y_position -= footer_style["size"] + 2
         y_position -= 12
 
         c.save()

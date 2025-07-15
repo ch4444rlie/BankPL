@@ -3,13 +3,14 @@ import random
 from datetime import datetime, timedelta
 import streamlit as st
 
-def generate_statement_data(bank_name, account_type="personal"):
+def generate_statement_data(bank_name, account_type="personal", num_transactions=25):
     """
     Generate synthetic bank statement data for a given bank.
     
     Args:
         bank_name (str): Name of the bank (e.g., 'Chase', 'Citibank').
         account_type (str): Type of account ('personal' or 'business').
+        num_transactions (int): Number of transactions to generate.
     
     Returns:
         dict: Context dictionary with bank statement data, including sections.
@@ -103,8 +104,8 @@ def generate_statement_data(bank_name, account_type="personal"):
             "Payroll Expense", "Merchant Payment", "Business Withdrawal"
         ]
 
-        for _ in range(random.randint(10, 25)):
-            trans_date = fake.date_between(start_date=start_date, end_date=end_date).strftime('%m/%d')
+        for _ in range(num_transactions):
+            trans_date = fake.date_between(start_date=start_date, end_date=end_date)
             trans_type = random.choice(["credit", "debit"])
             amount = round(random.uniform(10, 1000), 2)
             
@@ -124,7 +125,7 @@ def generate_statement_data(bank_name, account_type="personal"):
                 withdrawals_total += amount
             
             transaction = {
-                "date": trans_date,
+                "date": trans_date.strftime('%m/%d'),
                 "description": description,
                 "credit": credit,
                 "debit": debit,
@@ -134,6 +135,9 @@ def generate_statement_data(bank_name, account_type="personal"):
                 "ending_balance": f"{config['currency']}{balance:.2f}"
             }
             transactions.append(transaction)
+
+        # Sort transactions by date
+        transactions.sort(key=lambda x: datetime.strptime(x["date"], '%m/%d'))
 
         # Validate deposits and withdrawals
         deposits = [t for t in transactions if t['credit']]
@@ -228,7 +232,7 @@ def generate_statement_data(bank_name, account_type="personal"):
 
         # Add bank-specific sections
         if bank_name.lower() == 'wells fargo':
-            sections.insert(0, {
+            sections.append({
                 "title": "Your Wells Fargo",
                 "content": [{
                     "type": "text",
@@ -244,7 +248,7 @@ def generate_statement_data(bank_name, account_type="personal"):
                 }]
             })
         if bank_name.lower() == 'pnc':
-            sections.insert(2, {
+            sections.append({
                 "title": "Transaction and Interest Summary",
                 "content": [{
                     "type": "table",
@@ -284,20 +288,8 @@ def generate_statement_data(bank_name, account_type="personal"):
                 }]
             })
 
-        # Randomize section order (excluding bank-specific required sections)
-        fixed_sections = ["Your Wells Fargo", "Transaction and Interest Summary", "Daily Ending Balance"]
-        reorderable_sections = [s for s in sections if s["title"] not in fixed_sections]
-        random.shuffle(reorderable_sections)
-        fixed_sections_dict = {s["title"]: s for s in sections if s["title"] in fixed_sections}
-        sections = []
-        if bank_name.lower() == 'wells fargo' and "Your Wells Fargo" in fixed_sections_dict:
-            sections.append(fixed_sections_dict["Your Wells Fargo"])
-        sections.extend(reorderable_sections[:2])  # Add first two reorderable sections
-        if bank_name.lower() == 'pnc' and "Transaction and Interest Summary" in fixed_sections_dict:
-            sections.append(fixed_sections_dict["Transaction and Interest Summary"])
-        sections.extend(reorderable_sections[2:])  # Add remaining reorderable sections
-        if bank_name.lower() == 'chase' and "Daily Ending Balance" in fixed_sections_dict:
-            sections.append(fixed_sections_dict["Daily Ending Balance"])
+        # Randomize section order
+        random.shuffle(sections)
 
         # Context dictionary
         ctx = {
@@ -323,7 +315,7 @@ def generate_statement_data(bank_name, account_type="personal"):
             "client_number": fake.uuid4() if bank_name == "Citibank" else "",
             "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=80).strftime('%m/%d/%Y') if bank_name == "Citibank" else "",
             "total_pages": 1,
-            "layout_style": "two-column" if bank_name.lower() == "pnc" and random.random() > 0.3 else "sequential",
+            "layout_style": "sequential" if random.randint(0, 1) == 0 else "two-column",
             "sections": sections
         }
 
