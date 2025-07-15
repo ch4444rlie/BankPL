@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import base64
-from gen_pl import (
+from gen_PL import (
     generate_statement_data,
     create_dynamic_statement,
     create_citi_classic,
