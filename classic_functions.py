@@ -235,7 +235,7 @@ def create_citi_classic(ctx, output_buffer):
         y_position -= 12
         c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
 
-        y_position -= 12
+        y_position -= 3  # Move middle gridline up by 3/4 line space (12 - 9 = 3)
         c.setFont("Helvetica", 9)
         c.drawString(margin, y_position, "")
         c.drawString(margin + col_widths[0], y_position, "Opening balance")
@@ -262,7 +262,7 @@ def create_citi_classic(ctx, output_buffer):
         c.drawRightString(margin + sum(col_widths[:3]), y_position, format_text(ctx['summary']['withdrawals_total'], ctx))
         c.drawRightString(margin + sum(col_widths[:4]), y_position, format_text(ctx['summary']['deposits_total'], ctx))
         c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx['summary']['ending_balance'], ctx))
-        y_position -= 12
+        y_position -= 18  # Move bottom gridline down by half line space (12 + 6 = 18)
         c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
 
         # Notice
@@ -444,10 +444,6 @@ def create_chase_classic(ctx, output_buffer):
         y_position -= 30
 
         # Checking Summary
-        c.setFont("Helvetica-Bold", 9)
-        y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica-Bold", 9)
-        c.drawCentredString(PAGE_WIDTH / 2, y_position, format_text(ctx['account_type'], ctx))
-        y_position -= 13.5
         draw_section_divider("Checking Summary")
         col_widths = [2.4 * inch, 1.8 * inch, 1.8 * inch]
         col_x = [MARGIN, MARGIN + col_widths[0], MARGIN + col_widths[0] + col_widths[1]]
@@ -464,7 +460,7 @@ def create_chase_classic(ctx, output_buffer):
             ("Ending Balance", format_text(ctx['summary']['transactions_count'], ctx), format_text(ctx['summary']['ending_balance'], ctx)),
         ]
         for label, *values in summary_rows:
-            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9)
+            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["", "Instances", "Amount"], col_widths=col_widths, header_font="Helvetica-Bold")
             c.drawString(col_x[0], y_position, format_text(label, ctx))
             if len(values) == 1:
                 c.drawString(col_x[2], y_position, values[0])
@@ -496,7 +492,7 @@ def create_chase_classic(ctx, output_buffer):
         y_position -= 13.5
         c.setFont("Helvetica", 9)
         for deposit in ctx.get('deposits', []):
-            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Description", "Amount"], col_widths=col_widths)
+            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Description", "Amount"], col_widths=col_widths, header_font="Helvetica-Bold")
             c.drawString(col_x[0], y_position, format_text(deposit.get('date', ''), ctx))
             desc = format_text(deposit.get('description', ''), ctx)
             desc = desc[:50] + "…" if len(desc) > 50 else desc
@@ -508,7 +504,7 @@ def create_chase_classic(ctx, output_buffer):
             c.setLineWidth(2)
             c.line(MARGIN, y_position + 10, MARGIN + sum(col_widths), y_position + 10)
         if not ctx.get('deposits', []):
-            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9)
+            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Description", "Amount"], col_widths=col_widths, header_font="Helvetica-Bold")
             c.drawString(col_x[0], y_position, "No deposits for this period.")
             y_position -= 13.5
             c.setLineWidth(2)
@@ -527,7 +523,7 @@ def create_chase_classic(ctx, output_buffer):
         y_position -= 13.5
         c.setFont("Helvetica", 9)
         for withdrawal in ctx.get('withdrawals', []):
-            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Description", "Amount"], col_widths=col_widths)
+            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Description", "Amount"], col_widths=col_widths, header_font="Helvetica-Bold")
             c.drawString(col_x[0], y_position, format_text(withdrawal.get('date', ''), ctx))
             desc = format_text(withdrawal.get('description', ''), ctx)
             desc = desc[:50] + "…" if len(desc) > 50 else desc
@@ -539,7 +535,7 @@ def create_chase_classic(ctx, output_buffer):
             c.setLineWidth(2)
             c.line(MARGIN, y_position + 10, MARGIN + sum(col_widths), y_position + 10)
         if not ctx.get('withdrawals', []):
-            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9)
+            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Description", "Amount"], col_widths=col_widths, header_font="Helvetica-Bold")
             c.drawString(col_x[0], y_position, "No withdrawals for this period.")
             y_position -= 13.5
             c.setLineWidth(2)
@@ -559,7 +555,7 @@ def create_chase_classic(ctx, output_buffer):
         y_position -= 13.5
         c.setFont("Helvetica", 9)
         for balance in ctx.get('daily_balances', []):
-            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Amount"], col_widths=col_widths)
+            y_position = check_page_break(c, y_position, MARGIN, PAGE_HEIGHT, 13.5, "Helvetica", 9, is_table=True, headers=["Date", "Amount"], col_widths=col_widths, header_font="Helvetica-Bold")
             c.drawString(col_x[0], y_position, format_text(balance.get('date', ''), ctx))
             c.drawString(col_x[1], y_position, format_text(balance.get('amount', ''), ctx))
             y_position -= 13.5
@@ -898,14 +894,9 @@ def create_pnc_classic(ctx, output_buffer):
                     return value
             return str(value)
 
-        # Header
-        c.setFont("Helvetica", 22)
-        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 30, "Helvetica", 22)
-        c.drawString(margin, y_position, format_text(f"{ctx['account_type']} Statement", ctx))
-        y_position -= 18
-        c.setFont("Helvetica", 10.5)
-        c.drawString(margin, y_position, "PNC Bank")
+        # Logo (moved to top-right corner with padding)
         logo_path = ctx.get('logo_path', '')
+        logo_height = 0
         if logo_path:
             try:
                 img_data = open(logo_path, 'rb').read()
@@ -914,17 +905,29 @@ def create_pnc_classic(ctx, output_buffer):
                 target_width = 0.83 * inch
                 aspect_ratio = img_width / img_height if img_height > 0 else 1
                 target_height = target_width / aspect_ratio
-                c.drawImage(logo_path, PAGE_WIDTH - margin - target_width, y_position + 18 - target_height, 
+                logo_height = target_height + 10  # Padding around logo
+                c.drawImage(logo_path, PAGE_WIDTH - margin - target_width, PAGE_HEIGHT - margin - target_height, 
                             width=target_width, height=target_height, mask='auto')
-                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Logo rendered for {bank_name} at y={y_position + 18}, height={target_height}"]
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Logo rendered for {bank_name} at y={PAGE_HEIGHT - margin - target_height}, height={target_height}"]
             except Exception as e:
                 st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Failed to render logo for {bank_name}: {e}"]
                 c.setFont("Helvetica", 10.5)
-                c.drawString(PAGE_WIDTH - margin - 100, y_position, f"[Logo: {bank_name}]")
+                c.drawString(PAGE_WIDTH - margin - 100, PAGE_HEIGHT - margin - 24, f"[Logo: {bank_name}]")
+                logo_height = 24
         else:
             st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Logo path not provided for {bank_name}"]
             c.setFont("Helvetica", 10.5)
-            c.drawString(PAGE_WIDTH - margin - 100, y_position, f"[Logo: {bank_name}]")
+            c.drawString(PAGE_WIDTH - margin - 100, PAGE_HEIGHT - margin - 24, f"[Logo: {bank_name}]")
+            logo_height = 24
+
+        # Header (adjusted to start below logo with padding)
+        y_position = PAGE_HEIGHT - margin - logo_height - 10
+        c.setFont("Helvetica", 22)
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 30, "Helvetica", 22)
+        c.drawString(margin, y_position, format_text(f"{ctx['account_type']} Statement", ctx))
+        y_position -= 18
+        c.setFont("Helvetica", 10.5)
+        c.drawString(margin, y_position, "PNC Bank")
         y_position -= 30
         c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
         
@@ -1009,15 +1012,6 @@ def create_pnc_classic(ctx, output_buffer):
         y_position -= 12
         c.setFont("Helvetica-Bold", 12)
         c.drawString(margin, y_position, f"Overdraft Coverage: Your account is {format_text(ctx.get('summary', {}).get('overdraft_status', 'opted out'), ctx)}.")
-        y_position -= 12
-        c.setFont("Helvetica", 12)
-        c.drawString(margin, y_position, format_text(ctx['account_holder'], ctx))
-        y_position -= 12
-        address_lines = wrap_text(c, format_text(ctx['account_holder_address'], ctx), "Helvetica", 12, usable_width)
-        for line in address_lines:
-            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 12, "Helvetica", 12)
-            c.drawString(margin, y_position, line)
-            y_position -= 12
         y_position -= 14
         c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
         
