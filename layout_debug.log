@@ -1,0 +1,907 @@
+
+[Run at 2025-07-14 15:39:12]
+[2025-07-14 15:47:39.770618] Run started
+[2025-07-14 15:47:39.772095] Generated layout for Citibank: 4 sections, margin=0.50in
+[2025-07-14 15:47:39.783927] Transaction table data for Citibank: 17 rows
+[2025-07-14 15:47:39.785104] Page break triggered for Citibank: Needed 150pt, had 720.4833867382308pt
+[2025-07-14 15:47:39.785457] Page break triggered for Citibank: Needed 32pt, had 720.4833867382308pt
+[2025-07-14 15:47:39.788002] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 15:47:39.788534] Generated layout for Chase: 4 sections, margin=0.67in
+[2025-07-14 15:47:39.794179] Transaction table data for Chase: 20 rows
+[2025-07-14 15:47:39.796122] Page break triggered for Chase: Needed 34pt, had 695.7388899568602pt
+[2025-07-14 15:47:39.798611] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 15:47:39.799102] Generated layout for Wells Fargo: 4 sections, margin=0.59in
+[2025-07-14 15:47:39.827889] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 15:47:39.828879] Page break triggered for Wells Fargo: Needed 124pt, had 707.2318886235557pt
+[2025-07-14 15:47:39.829212] Page break triggered for Wells Fargo: Needed 34pt, had 707.2318886235557pt
+[2025-07-14 15:47:39.831446] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 15:47:39.831933] Generated layout for PNC: 4 sections, margin=0.55in
+[2025-07-14 15:47:39.834245] Transaction table data for PNC: 12 rows
+[2025-07-14 15:47:39.836368] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:03:49.162259] Run started
+[2025-07-14 16:03:49.171097] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:03:49.171483] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:03:49.174210] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:03:49.178612] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:03:49.179050] Transaction table data for Chase: 20 rows
+[2025-07-14 16:03:49.181336] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:03:49.208919] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:03:49.209506] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:03:49.209803] Page break for Wells Fargo: Needed 342pt, had 720.0pt
+[2025-07-14 16:03:49.212493] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:03:49.214847] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:03:49.215358] Transaction table data for PNC: 12 rows
+[2025-07-14 16:03:49.217125] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:16:09.569586] Run started
+[2025-07-14 16:16:09.579467] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:16:09.579753] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:16:09.582523] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:16:09.587197] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:16:09.587702] Transaction table data for Chase: 20 rows
+[2025-07-14 16:16:09.589804] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:16:09.616702] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 16:16:09.616984] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:16:09.618116] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 16:16:09.620185] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:16:09.622538] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:16:09.622827] Transaction table data for PNC: 12 rows
+[2025-07-14 16:16:09.624951] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:19:28.803874] Run started
+[2025-07-14 16:19:28.813005] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:19:28.813585] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:19:28.817858] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:19:28.823880] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:19:28.824842] Transaction table data for Chase: 20 rows
+[2025-07-14 16:19:28.828533] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:19:28.858489] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:19:28.858976] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:19:28.861837] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:19:28.864167] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:19:28.864661] Transaction table data for PNC: 12 rows
+[2025-07-14 16:19:28.866538] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:23:38.052413] Run started
+[2025-07-14 16:23:38.062552] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:23:38.062858] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:23:38.066352] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:23:38.071422] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:23:38.071947] Transaction table data for Chase: 20 rows
+[2025-07-14 16:23:38.072216] Page break for Chase: Needed 384pt, had 720.0pt
+[2025-07-14 16:23:38.074507] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:23:38.101299] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:23:38.101753] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:23:38.104373] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:23:38.106671] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:23:38.106994] Transaction table data for PNC: 12 rows
+[2025-07-14 16:23:38.108859] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:28:42.128955] Run started
+[2025-07-14 16:28:42.138576] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:28:42.139006] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:28:42.141953] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:28:42.146613] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:28:42.147323] Transaction table data for Chase: 20 rows
+[2025-07-14 16:28:42.147648] Page break for Chase: Needed 384pt, had 720.0pt
+[2025-07-14 16:28:42.149996] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:28:42.177081] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:28:42.177418] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:28:42.180343] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:28:42.182917] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:28:42.183295] Transaction table data for PNC: 12 rows
+[2025-07-14 16:28:42.185656] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:30:52.631530] Run started
+[2025-07-14 16:30:52.640430] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:30:52.641047] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:30:52.643979] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:30:52.648222] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:30:52.648547] Transaction table data for Chase: 20 rows
+[2025-07-14 16:30:52.649566] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:30:52.651012] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:30:52.678157] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:30:52.678543] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:30:52.681231] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:30:52.683506] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:30:52.683733] Transaction table data for PNC: 12 rows
+[2025-07-14 16:30:52.685698] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:35:25.123478] Run started
+[2025-07-14 16:35:25.133491] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:35:25.134205] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:35:25.137827] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:35:25.143737] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:35:25.144075] Transaction table data for Chase: 20 rows
+[2025-07-14 16:35:25.145870] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:35:25.147903] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:35:25.178465] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 16:35:25.179064] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:35:25.181688] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:35:25.184176] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:35:25.184670] Transaction table data for PNC: 12 rows
+[2025-07-14 16:35:25.187363] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:36:16.438078] Run started
+[2025-07-14 16:36:16.447390] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:36:16.447807] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:36:16.450543] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:36:16.454936] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:36:16.455430] Transaction table data for Chase: 20 rows
+[2025-07-14 16:36:16.455690] Page break for Chase: Needed 384pt, had 720.0pt
+[2025-07-14 16:36:16.458254] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:36:16.485168] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 16:36:16.485443] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:36:16.488305] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:36:16.490638] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:36:16.490900] Transaction table data for PNC: 12 rows
+[2025-07-14 16:36:16.493075] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:40:25.245524] Run started
+[2025-07-14 16:40:25.255484] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:40:25.256274] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:40:25.259019] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:40:25.263353] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:40:25.263684] Transaction table data for Chase: 20 rows
+[2025-07-14 16:40:25.264717] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:40:25.266166] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:40:25.294366] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 16:40:25.294691] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:40:25.295798] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 16:40:25.297832] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:40:25.300201] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:40:25.300687] Transaction table data for PNC: 12 rows
+[2025-07-14 16:40:25.302421] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:40:27.894729] Run started
+[2025-07-14 16:40:27.904337] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:40:27.904607] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:40:27.907237] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:40:27.911506] Coinflip for Chase: 1 (two-column)
+[2025-07-14 16:40:27.912016] Transaction table data for Chase: 20 rows
+[2025-07-14 16:40:27.914065] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:40:27.941790] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:40:27.942337] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:40:27.944929] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:40:27.947273] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:40:27.947839] Transaction table data for PNC: 12 rows
+[2025-07-14 16:40:27.949886] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:40:30.555376] Run started
+[2025-07-14 16:40:30.564969] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:40:30.565234] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:40:30.567978] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:40:30.572411] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:40:30.572666] Transaction table data for Chase: 20 rows
+[2025-07-14 16:40:30.573934] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:40:30.575451] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:40:30.602515] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:40:30.603062] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:40:30.605645] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:40:30.607957] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:40:30.608310] Transaction table data for PNC: 12 rows
+[2025-07-14 16:40:30.610205] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:43:46.362735] Run started
+[2025-07-14 16:43:46.371923] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:43:46.372398] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:43:46.376221] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:43:46.380564] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:43:46.381079] Transaction table data for Chase: 20 rows
+[2025-07-14 16:43:46.381304] Page break for Chase: Needed 384pt, had 720.0pt
+[2025-07-14 16:43:46.383447] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:43:46.410740] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:43:46.411300] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:43:46.413873] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:43:46.416185] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:43:46.416412] Transaction table data for PNC: 12 rows
+[2025-07-14 16:43:46.418419] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:49:58.107247] Run started
+[2025-07-14 16:49:58.118322] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:49:58.118619] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:49:58.121305] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:49:58.125525] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:49:58.125999] Transaction table data for Chase: 20 rows
+[2025-07-14 16:49:58.126206] Page break for Chase: Needed 384pt, had 720.0pt
+[2025-07-14 16:49:58.128427] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:49:58.157284] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 16:49:58.157714] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:49:58.158564] Page break for Wells Fargo: Needed 104pt, had 720.0pt
+[2025-07-14 16:49:58.160846] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:49:58.163246] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:49:58.163506] Transaction table data for PNC: 12 rows
+[2025-07-14 16:49:58.165563] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:50:48.407855] Run started
+[2025-07-14 16:50:48.417234] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:50:48.417692] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:50:48.420419] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:50:48.424999] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:50:48.425511] Transaction table data for Chase: 20 rows
+[2025-07-14 16:50:48.426805] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:50:48.428589] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:50:48.455382] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 16:50:48.455896] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:50:48.456118] Page break for Wells Fargo: Needed 342pt, had 720.0pt
+[2025-07-14 16:50:48.458778] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:50:48.461036] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:50:48.461368] Transaction table data for PNC: 12 rows
+[2025-07-14 16:50:48.463752] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:51:15.945427] Run started
+[2025-07-14 16:51:15.955241] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:51:15.955530] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:51:15.958729] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:51:15.963558] Coinflip for Chase: 1 (two-column)
+[2025-07-14 16:51:15.964117] Transaction table data for Chase: 20 rows
+[2025-07-14 16:51:15.966291] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:51:15.993289] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:51:15.993655] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:51:15.996380] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:51:15.998674] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:51:15.999153] Transaction table data for PNC: 12 rows
+[2025-07-14 16:51:16.001047] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:52:25.926526] Run started
+[2025-07-14 16:52:25.936205] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:52:25.936733] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:52:25.939590] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:52:25.943956] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:52:25.944352] Transaction table data for Chase: 20 rows
+[2025-07-14 16:52:25.945435] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:52:25.947165] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:52:25.974517] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:52:25.974966] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:52:25.977811] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:52:25.980261] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:52:25.980492] Transaction table data for PNC: 12 rows
+[2025-07-14 16:52:25.982687] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:53:06.518668] Run started
+[2025-07-14 16:53:06.528138] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:53:06.528690] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:53:06.531227] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:53:06.535489] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:53:06.535714] Transaction table data for Chase: 20 rows
+[2025-07-14 16:53:06.536883] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:53:06.538330] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:53:06.565566] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:53:06.566126] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:53:06.568691] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:53:06.571000] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:53:06.571413] Transaction table data for PNC: 12 rows
+[2025-07-14 16:53:06.573286] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:53:28.600393] Run started
+[2025-07-14 16:53:28.609813] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:53:28.610286] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:53:28.613170] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:53:28.617550] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:53:28.617859] Transaction table data for Chase: 20 rows
+[2025-07-14 16:53:28.619300] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:53:28.621047] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:53:28.648794] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:53:28.649367] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:53:28.652013] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:53:28.654311] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:53:28.654776] Transaction table data for PNC: 12 rows
+[2025-07-14 16:53:28.656669] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:53:45.108748] Run started
+[2025-07-14 16:53:45.117965] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:53:45.118296] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:53:45.121042] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:53:45.125337] Coinflip for Chase: 1 (two-column)
+[2025-07-14 16:53:45.125574] Transaction table data for Chase: 20 rows
+[2025-07-14 16:53:45.128081] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:53:45.156921] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 16:53:45.157447] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:53:45.158268] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 16:53:45.160375] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:53:45.162777] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:53:45.163007] Transaction table data for PNC: 12 rows
+[2025-07-14 16:53:45.165250] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:56:39.283439] Run started
+[2025-07-14 16:56:39.293458] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 16:56:39.293869] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:56:39.296575] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:56:39.300774] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:56:39.300993] Transaction table data for Chase: 20 rows
+[2025-07-14 16:56:39.302114] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:56:39.303562] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:56:39.331030] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:56:39.331400] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:56:39.334228] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:56:39.336826] Coinflip for PNC: 1 (two-column)
+[2025-07-14 16:56:39.337522] Transaction table data for PNC: 12 rows
+[2025-07-14 16:56:39.339783] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 16:58:44.164938] Run started
+[2025-07-14 16:58:44.174261] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 16:58:44.174840] Transaction table data for Citibank: 17 rows
+[2025-07-14 16:58:44.177828] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 16:58:44.183010] Coinflip for Chase: 0 (sequential)
+[2025-07-14 16:58:44.183314] Transaction table data for Chase: 20 rows
+[2025-07-14 16:58:44.184596] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 16:58:44.186081] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 16:58:44.212821] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 16:58:44.213098] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 16:58:44.217065] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 16:58:44.219417] Coinflip for PNC: 0 (sequential)
+[2025-07-14 16:58:44.219902] Transaction table data for PNC: 12 rows
+[2025-07-14 16:58:44.221702] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:02:24.226119] Run started
+[2025-07-14 17:02:24.235376] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 17:02:24.235673] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:02:24.238443] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:02:24.242803] Coinflip for Chase: 1 (two-column)
+[2025-07-14 17:02:24.243111] Transaction table data for Chase: 20 rows
+[2025-07-14 17:02:24.245847] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:02:24.272758] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 17:02:24.273128] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:02:24.275886] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:02:24.278199] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:02:24.278694] Transaction table data for PNC: 12 rows
+[2025-07-14 17:02:24.280452] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:04:39.321544] Run started
+[2025-07-14 17:04:39.331041] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 17:04:39.331874] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:04:39.334667] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:04:39.339051] Coinflip for Chase: 1 (two-column)
+[2025-07-14 17:04:39.339340] Transaction table data for Chase: 20 rows
+[2025-07-14 17:04:39.342005] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:04:39.369735] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:04:39.370286] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:04:39.371198] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:04:39.373322] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:04:39.375669] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:04:39.376154] Transaction table data for PNC: 12 rows
+[2025-07-14 17:04:39.377952] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:07:25.801423] Run started
+[2025-07-14 17:07:25.810518] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 17:07:25.811006] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:07:25.813549] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:07:25.818645] Coinflip for Chase: 0 (sequential)
+[2025-07-14 17:07:25.818952] Transaction table data for Chase: 20 rows
+[2025-07-14 17:07:25.820316] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:07:25.821978] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:07:25.849166] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:07:25.849708] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:07:25.850507] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:07:25.852576] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:07:25.854877] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:07:25.855348] Transaction table data for PNC: 12 rows
+[2025-07-14 17:07:25.857242] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:16:46.079720] Run started
+[2025-07-14 17:16:46.091065] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 17:16:46.091825] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:16:46.095055] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:16:46.099534] Coinflip for Chase: 0 (sequential)
+[2025-07-14 17:16:46.100235] Transaction table data for Chase: 20 rows
+[2025-07-14 17:16:46.101248] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:16:46.103216] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:16:46.130891] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 17:16:46.131496] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:16:46.134278] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:16:46.136663] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:16:46.136950] Transaction table data for PNC: 12 rows
+[2025-07-14 17:16:46.139085] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:18:34.509308] Run started
+[2025-07-14 17:18:34.519229] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 17:18:34.519542] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:18:34.522544] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:18:34.526959] Coinflip for Chase: 1 (two-column)
+[2025-07-14 17:18:34.527249] Transaction table data for Chase: 20 rows
+[2025-07-14 17:18:34.529696] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:18:34.556830] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:18:34.557360] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:18:34.558218] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:18:34.560337] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:18:34.562647] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:18:34.562926] Transaction table data for PNC: 12 rows
+[2025-07-14 17:18:34.564896] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:22:00.319304] Run started
+[2025-07-14 17:22:00.328466] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:22:00.329103] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 17:22:00.329693] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:22:00.332248] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:22:00.336910] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:22:00.337293] Coinflip for Chase: 0 (sequential)
+[2025-07-14 17:22:00.337702] Transaction table data for Chase: 20 rows
+[2025-07-14 17:22:00.338974] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:22:00.340824] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:22:00.368330] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:22:00.368818] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 17:22:00.369440] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:22:00.372165] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:22:00.374492] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:22:00.374823] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:22:00.375254] Transaction table data for PNC: 12 rows
+[2025-07-14 17:22:00.377532] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:25:14.181753] Run started
+[2025-07-14 17:25:14.190866] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:25:14.191443] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 17:25:14.191862] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:25:14.194404] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 17:25:14.198776] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:25:14.199199] Coinflip for Chase: 1 (two-column)
+[2025-07-14 17:25:14.199909] Transaction table data for Chase: 20 rows
+[2025-07-14 17:25:14.202571] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 17:25:14.229314] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:25:14.229648] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:25:14.229871] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:25:14.231243] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:25:14.233804] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 17:25:14.236036] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:25:14.236374] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:25:14.236683] Transaction table data for PNC: 12 rows
+[2025-07-14 17:25:14.239201] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 17:27:37.080115] Run started
+[2025-07-14 17:27:37.088694] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:27:37.089185] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 17:27:37.089458] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:27:37.092251] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 17:27:37.097784] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:27:37.098284] Coinflip for Chase: 0 (sequential)
+[2025-07-14 17:27:37.098750] Transaction table data for Chase: 20 rows
+[2025-07-14 17:27:37.100178] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:27:37.102401] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 17:27:37.134430] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:27:37.134980] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:27:37.135249] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:27:37.136398] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:27:37.138545] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 17:27:37.141587] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:27:37.141884] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:27:37.142482] Transaction table data for PNC: 12 rows
+[2025-07-14 17:27:37.144655] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 17:31:36.159688] Run started
+[2025-07-14 17:31:36.169056] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:31:36.169677] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 17:31:36.169916] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:31:36.172733] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:31:36.177269] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:31:36.177664] Coinflip for Chase: 0 (sequential)
+[2025-07-14 17:31:36.178165] Transaction table data for Chase: 20 rows
+[2025-07-14 17:31:36.179034] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:31:36.180520] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:31:36.207484] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:31:36.207816] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:31:36.208199] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:31:36.209085] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:31:36.211388] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:31:36.213534] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:31:36.213830] Coinflip for PNC: 1 (two-column)
+[2025-07-14 17:31:36.214277] Transaction table data for PNC: 12 rows
+[2025-07-14 17:31:36.216142] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:31:50.771593] Run started
+[2025-07-14 17:31:50.780148] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:31:50.780702] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 17:31:50.781485] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:31:50.784126] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 17:31:50.788346] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:31:50.788718] Coinflip for Chase: 1 (two-column)
+[2025-07-14 17:31:50.789037] Transaction table data for Chase: 20 rows
+[2025-07-14 17:31:50.791832] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 17:31:50.819130] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:31:50.819488] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:31:50.819828] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:31:50.820812] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:31:50.822926] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 17:31:50.825104] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:31:50.825378] Coinflip for PNC: 1 (two-column)
+[2025-07-14 17:31:50.826012] Transaction table data for PNC: 12 rows
+[2025-07-14 17:31:50.827979] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 17:37:35.252253] Run started
+[2025-07-14 17:37:35.261017] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:37:35.261678] Coin flip for Citibank: 0 (sequential)
+[2025-07-14 17:37:35.261941] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:37:35.264833] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:37:35.268996] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:37:35.269275] Coin flip for Chase: 0 (sequential)
+[2025-07-14 17:37:35.269740] Transaction table data for Chase: 20 rows
+[2025-07-14 17:37:35.270941] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:37:35.272887] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:37:35.300061] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:37:35.300397] Coin flip for Wells Fargo: 1 (two-column)
+[2025-07-14 17:37:35.301177] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:37:35.302350] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:37:35.304811] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:37:35.307044] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:37:35.307337] Coin flip for PNC: 0 (sequential)
+[2025-07-14 17:37:35.307650] Transaction table data for PNC: 12 rows
+[2025-07-14 17:37:35.309576] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:38:11.558512] Run started
+[2025-07-14 17:38:11.567621] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:38:11.568189] Coin flip for Citibank: 1 (two-column)
+[2025-07-14 17:38:11.568752] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:38:11.571644] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:38:11.575793] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:38:11.576080] Coin flip for Chase: 0 (sequential)
+[2025-07-14 17:38:11.576298] Transaction table data for Chase: 20 rows
+[2025-07-14 17:38:11.577438] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:38:11.578917] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:38:11.605579] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:38:11.605956] Coin flip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:38:11.606464] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:38:11.607293] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 17:38:11.609306] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:38:11.611478] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:38:11.611758] Coin flip for PNC: 0 (sequential)
+[2025-07-14 17:38:11.612167] Transaction table data for PNC: 12 rows
+[2025-07-14 17:38:11.613970] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:44:43.328128] Run started
+[2025-07-14 17:44:43.337215] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:44:43.337788] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 17:44:43.338338] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:44:43.340857] PDF generated: out\citibank_statement_1160.pdf
+[2025-07-14 17:44:43.345084] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:44:43.345359] Coinflip for Chase: 1 (two-column)
+[2025-07-14 17:44:43.345806] Transaction table data for Chase: 20 rows
+[2025-07-14 17:44:43.348458] PDF generated: out\chase_statement_4935.pdf
+[2025-07-14 17:44:43.375338] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:44:43.375680] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 17:44:43.376209] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:44:43.378824] PDF generated: out\wells fargo_statement_2297.pdf
+[2025-07-14 17:44:43.381048] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:44:43.381422] Coinflip for PNC: 0 (sequential)
+[2025-07-14 17:44:43.381659] Transaction table data for PNC: 12 rows
+[2025-07-14 17:44:43.383814] PDF generated: out\pnc_statement_6929.pdf
+
+[2025-07-14 17:45:29.322732] Run started
+[2025-07-14 17:45:29.331928] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:45:29.332527] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 17:45:29.333283] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:45:29.335919] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 17:45:29.340511] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:45:29.340928] Coinflip for Chase: 0 (sequential)
+[2025-07-14 17:45:29.341355] Transaction table data for Chase: 20 rows
+[2025-07-14 17:45:29.342600] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:45:29.344578] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 17:45:29.373845] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:45:29.374267] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 17:45:29.374867] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:45:29.377590] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 17:45:29.379976] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:45:29.380259] Coinflip for PNC: 1 (two-column)
+[2025-07-14 17:45:29.380780] Transaction table data for PNC: 12 rows
+[2025-07-14 17:45:29.382933] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 17:48:44.351421] Run started
+[2025-07-14 17:48:44.361240] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:48:44.361882] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 17:48:44.362174] Transaction table data for Citibank: 17 rows
+[2025-07-14 17:48:44.365376] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 17:48:44.369603] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 17:48:44.369906] Coinflip for Chase: 0 (sequential)
+[2025-07-14 17:48:44.370291] Transaction table data for Chase: 20 rows
+[2025-07-14 17:48:44.371384] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 17:48:44.372885] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 17:48:44.399655] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 17:48:44.400002] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 17:48:44.400266] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 17:48:44.403135] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 17:48:44.405341] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 17:48:44.405613] Coinflip for PNC: 1 (two-column)
+[2025-07-14 17:48:44.406156] Transaction table data for PNC: 12 rows
+[2025-07-14 17:48:44.407982] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:01:58.563185] Run started
+[2025-07-14 18:01:58.571934] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:01:58.572452] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 18:01:58.572699] Transaction table data for Citibank: 17 rows
+[2025-07-14 18:01:58.575863] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 18:01:58.580126] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:01:58.580424] Coinflip for Chase: 0 (sequential)
+[2025-07-14 18:01:58.580951] Transaction table data for Chase: 20 rows
+[2025-07-14 18:01:58.581823] Page break for Chase: Needed 60pt, had 720.0pt
+[2025-07-14 18:01:58.583263] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 18:01:58.609445] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:01:58.609762] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 18:01:58.610057] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 18:01:58.613340] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 18:01:58.615522] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 18:01:58.615802] Coinflip for PNC: 1 (two-column)
+[2025-07-14 18:01:58.616079] Transaction table data for PNC: 12 rows
+[2025-07-14 18:01:58.618090] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:11:00.055694] Run started
+[2025-07-14 18:11:00.064526] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:11:00.065204] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 18:11:00.065854] Transaction table data for Citibank: 17 rows
+[2025-07-14 18:11:00.068274] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 18:11:00.072462] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:11:00.072770] Coinflip for Chase: 1 (two-column)
+[2025-07-14 18:11:00.073218] Transaction table data for Chase: 20 rows
+[2025-07-14 18:11:00.075333] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 18:11:00.103128] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:11:00.103721] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 18:11:00.104002] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 18:11:00.106972] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 18:11:00.109088] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 18:11:00.109361] Coinflip for PNC: 1 (two-column)
+[2025-07-14 18:11:00.109718] Transaction table data for PNC: 12 rows
+[2025-07-14 18:11:00.111655] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:22:42.375405] Run started
+[2025-07-14 18:22:42.384375] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:22:42.384995] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 18:22:42.385551] Transaction table data for Citibank: 17 rows
+[2025-07-14 18:22:42.388124] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 18:22:42.392730] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:22:42.393092] Coinflip for Chase: 1 (two-column)
+[2025-07-14 18:22:42.393335] Transaction table data for Chase: 20 rows
+[2025-07-14 18:22:42.395731] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 18:22:42.422842] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:22:42.423181] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 18:22:42.423429] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 18:22:42.426279] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 18:22:42.428458] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 18:22:42.428728] Coinflip for PNC: 0 (sequential)
+[2025-07-14 18:22:42.428974] Transaction table data for PNC: 12 rows
+[2025-07-14 18:22:42.431050] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:23:50.417607] Run started
+[2025-07-14 18:23:50.426753] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:23:50.427275] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 18:23:50.427884] Transaction table data for Citibank: 17 rows
+[2025-07-14 18:23:50.430806] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 18:23:50.435094] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:23:50.435592] Coinflip for Chase: 1 (two-column)
+[2025-07-14 18:23:50.436208] Transaction table data for Chase: 20 rows
+[2025-07-14 18:23:50.439090] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 18:23:50.469099] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:23:50.469482] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 18:23:50.469714] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 18:23:50.473001] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 18:23:50.475312] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 18:23:50.475649] Coinflip for PNC: 0 (sequential)
+[2025-07-14 18:23:50.475909] Transaction table data for PNC: 12 rows
+[2025-07-14 18:23:50.478138] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:26:10.460334] Run started
+[2025-07-14 18:26:10.469416] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:26:10.469966] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 18:26:10.470388] Transaction table data for Citibank: 17 rows
+[2025-07-14 18:26:10.474260] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 18:26:10.478586] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:26:10.478949] Coinflip for Chase: 1 (two-column)
+[2025-07-14 18:26:10.479609] Transaction table data for Chase: 20 rows
+[2025-07-14 18:26:10.482210] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 18:26:10.509409] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:26:10.509807] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 18:26:10.510239] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 18:26:10.511287] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 18:26:10.513368] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 18:26:10.515677] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 18:26:10.515967] Coinflip for PNC: 1 (two-column)
+[2025-07-14 18:26:10.516492] Transaction table data for PNC: 12 rows
+[2025-07-14 18:26:10.518292] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:27:11.036481] Run started
+[2025-07-14 18:27:11.045803] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:27:11.046460] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 18:27:11.046961] Transaction table data for Citibank: 17 rows
+[2025-07-14 18:27:11.049762] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 18:27:11.054671] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:27:11.055179] Coinflip for Chase: 0 (sequential)
+[2025-07-14 18:27:11.055707] Transaction table data for Chase: 20 rows
+[2025-07-14 18:27:11.058074] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 18:27:11.086967] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:27:11.087311] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 18:27:11.087831] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 18:27:11.090591] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 18:27:11.093172] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 18:27:11.093449] Coinflip for PNC: 1 (two-column)
+[2025-07-14 18:27:11.093660] Transaction table data for PNC: 12 rows
+[2025-07-14 18:27:11.095682] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:27:38.931798] Run started
+[2025-07-14 18:27:38.941066] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:27:38.941714] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 18:27:38.942065] Transaction table data for Citibank: 17 rows
+[2025-07-14 18:27:38.945135] PDF generated: test\citibank_statement_1160.pdf
+[2025-07-14 18:27:38.949536] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 18:27:38.949886] Coinflip for Chase: 1 (two-column)
+[2025-07-14 18:27:38.950559] Transaction table data for Chase: 20 rows
+[2025-07-14 18:27:38.952753] PDF generated: test\chase_statement_4935.pdf
+[2025-07-14 18:27:38.981437] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:27:38.981794] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 18:27:38.982303] Transaction table data for Wells Fargo: 17 rows
+[2025-07-14 18:27:38.983111] Page break for Wells Fargo: Needed 60pt, had 720.0pt
+[2025-07-14 18:27:38.985179] PDF generated: test\wells fargo_statement_2297.pdf
+[2025-07-14 18:27:38.987416] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 18:27:38.987697] Coinflip for PNC: 0 (sequential)
+[2025-07-14 18:27:38.987988] Transaction table data for PNC: 12 rows
+[2025-07-14 18:27:38.990493] PDF generated: test\pnc_statement_6929.pdf
+
+[2025-07-14 18:57:55.397896] Run started
+
+[2025-07-14 18:58:13.588443] Run started
+[2025-07-14 18:58:13.619251] Logo rendered for Citibank at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 18:58:13.620022] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 18:58:13.620748] Transaction table data for Citibank: 18 rows
+[2025-07-14 18:58:13.621781] Page break for Citibank: Needed 60pt, had 720.0pt
+[2025-07-14 18:58:13.643085] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 18:58:13.647552] Logo rendered for Chase at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 18:58:13.647847] Coinflip for Chase: 0 (sequential)
+[2025-07-14 18:58:13.648356] Transaction table data for Chase: 15 rows
+[2025-07-14 18:58:13.649082] Page break for Chase: Needed 462pt, had 720.0pt
+[2025-07-14 18:58:13.651221] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 18:58:13.678372] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:58:13.678924] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 18:58:13.679435] Transaction table data for Wells Fargo: 19 rows
+[2025-07-14 18:58:13.679652] Page break for Wells Fargo: Needed 266pt, had 720.0pt
+[2025-07-14 18:58:13.682414] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 18:58:13.684535] Logo rendered for PNC at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 18:58:13.684811] Coinflip for PNC: 1 (two-column)
+[2025-07-14 18:58:13.685543] Transaction table data for PNC: 14 rows
+[2025-07-14 18:58:13.685743] Page break for PNC: Needed 196pt, had 720.0pt
+[2025-07-14 18:58:13.687934] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 18:59:41.118821] Run started
+[2025-07-14 18:59:41.127611] Logo rendered for Citibank at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 18:59:41.128156] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 18:59:41.128723] Transaction table data for Citibank: 18 rows
+[2025-07-14 18:59:41.131272] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 18:59:41.136100] Logo rendered for Chase at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 18:59:41.136418] Coinflip for Chase: 1 (two-column)
+[2025-07-14 18:59:41.137003] Transaction table data for Chase: 15 rows
+[2025-07-14 18:59:41.137757] Page break for Chase: Needed 462pt, had 720.0pt
+[2025-07-14 18:59:41.140028] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 18:59:41.166857] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 18:59:41.167380] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 18:59:41.167879] Transaction table data for Wells Fargo: 19 rows
+[2025-07-14 18:59:41.168091] Page break for Wells Fargo: Needed 266pt, had 720.0pt
+[2025-07-14 18:59:41.170804] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 18:59:41.173134] Logo rendered for PNC at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 18:59:41.173455] Coinflip for PNC: 1 (two-column)
+[2025-07-14 18:59:41.174362] Transaction table data for PNC: 14 rows
+[2025-07-14 18:59:41.174568] Page break for PNC: Needed 196pt, had 720.0pt
+[2025-07-14 18:59:41.176517] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 19:00:29.012738] Run started
+[2025-07-14 19:00:29.021613] Logo rendered for Citibank at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 19:00:29.022121] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 19:00:29.022700] Transaction table data for Citibank: 18 rows
+[2025-07-14 19:00:29.025625] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 19:00:29.030303] Logo rendered for Chase at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 19:00:29.030629] Coinflip for Chase: 0 (sequential)
+[2025-07-14 19:00:29.031222] Transaction table data for Chase: 15 rows
+[2025-07-14 19:00:29.032154] Page break for Chase: Needed 462pt, had 720.0pt
+[2025-07-14 19:00:29.034413] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 19:00:29.061841] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 19:00:29.062352] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 19:00:29.062856] Transaction table data for Wells Fargo: 19 rows
+[2025-07-14 19:00:29.063064] Page break for Wells Fargo: Needed 266pt, had 720.0pt
+[2025-07-14 19:00:29.065864] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 19:00:29.067944] Logo rendered for PNC at y=756.0, height=108.0, extra whitespace=40pt
+[2025-07-14 19:00:29.068223] Coinflip for PNC: 1 (two-column)
+[2025-07-14 19:00:29.068955] Transaction table data for PNC: 14 rows
+[2025-07-14 19:00:29.069163] Page break for PNC: Needed 196pt, had 720.0pt
+[2025-07-14 19:00:29.071245] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 19:22:53.076235] Run started
+[2025-07-14 19:22:53.088370] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:22:53.088929] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 19:22:53.091738] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 19:22:53.096750] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:22:53.097022] Coinflip for Chase: 0 (sequential)
+[2025-07-14 19:22:53.098010] Daily balances table data for Chase: 31 rows
+[2025-07-14 19:22:53.100033] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 19:22:53.128061] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 19:22:53.128414] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 19:22:53.131619] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 19:22:53.133837] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 19:22:53.134127] Coinflip for PNC: 0 (sequential)
+[2025-07-14 19:22:53.136562] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 19:32:27.790203] Run started
+[2025-07-14 19:32:27.799767] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:32:27.800392] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 19:32:27.803479] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 19:32:27.808044] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:32:27.808326] Coinflip for Chase: 1 (two-column)
+[2025-07-14 19:32:27.809924] Daily balances table data for Chase: 31 rows
+[2025-07-14 19:32:27.810384] Page break for Chase: Needed 14pt, had 694.0pt
+[2025-07-14 19:32:27.812852] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 19:32:27.840149] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 19:32:27.840517] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 19:32:27.842166] Page break for Wells Fargo: Needed 14pt, had 694.0pt
+[2025-07-14 19:32:27.844572] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 19:32:27.846761] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 19:32:27.847052] Coinflip for PNC: 0 (sequential)
+[2025-07-14 19:32:27.848096] Page break for PNC: Needed 14pt, had 694.0pt
+[2025-07-14 19:32:27.849940] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 19:50:57.162921] Run started
+[2025-07-14 19:50:57.172109] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:50:57.172643] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 19:50:57.176062] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 19:50:57.180751] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:50:57.181086] Coinflip for Chase: 1 (two-column)
+[2025-07-14 19:50:57.182542] Daily balances table data for Chase: 31 rows
+[2025-07-14 19:50:57.182920] Page break for Chase: Needed 14pt, had 694.0pt
+[2025-07-14 19:50:57.184990] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 19:50:57.213526] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 19:50:57.213899] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 19:50:57.215278] Page break for Wells Fargo: Needed 14pt, had 694.0pt
+[2025-07-14 19:50:57.217628] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 19:50:57.219893] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 19:50:57.220271] Coinflip for PNC: 1 (two-column)
+[2025-07-14 19:50:57.221141] Transaction table data for PNC: 14 rows
+[2025-07-14 19:50:57.221846] Page break for PNC: Needed 14pt, had 694.0pt
+[2025-07-14 19:50:57.223414] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 19:57:02.615055] Run started
+[2025-07-14 19:57:02.623582] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:57:02.624201] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 19:57:02.627365] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 19:57:02.632262] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 19:57:02.632713] Coinflip for Chase: 0 (sequential)
+[2025-07-14 19:57:02.634440] Daily balances table data for Chase: 31 rows
+[2025-07-14 19:57:02.635087] Page break for Chase: Needed 14pt, had 694.0pt
+[2025-07-14 19:57:02.638486] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 19:57:02.671166] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 19:57:02.671621] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 19:57:02.672969] Page break for Wells Fargo: Needed 14pt, had 694.0pt
+[2025-07-14 19:57:02.675163] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 19:57:02.677509] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 19:57:02.677797] Coinflip for PNC: 1 (two-column)
+[2025-07-14 19:57:02.678522] Transaction table data for PNC: 14 rows
+[2025-07-14 19:57:02.678986] Page break for PNC: Needed 14pt, had 694.0pt
+[2025-07-14 19:57:02.680832] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 20:03:11.522651] Run started
+[2025-07-14 20:03:11.531942] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 20:03:11.532516] Coinflip for Citibank: 1 (two-column)
+[2025-07-14 20:03:11.535519] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 20:03:11.540218] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 20:03:11.540545] Coinflip for Chase: 1 (two-column)
+[2025-07-14 20:03:11.541666] Daily balances table data for Chase: 31 rows
+[2025-07-14 20:03:11.542110] Page break for Chase: Needed 14pt, had 706.0pt
+[2025-07-14 20:03:11.544393] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 20:03:11.572451] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 20:03:11.572806] Coinflip for Wells Fargo: 0 (sequential)
+[2025-07-14 20:03:11.574093] Page break for Wells Fargo: Needed 14pt, had 706.0pt
+[2025-07-14 20:03:11.576340] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 20:03:11.578707] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 20:03:11.579018] Coinflip for PNC: 1 (two-column)
+[2025-07-14 20:03:11.579854] Transaction table data for PNC: 14 rows
+[2025-07-14 20:03:11.580427] Page break for PNC: Needed 14pt, had 706.0pt
+[2025-07-14 20:03:11.582266] PDF generated: test\pnc_statement_9101.pdf
+
+[2025-07-14 20:09:20.476677] Run started
+[2025-07-14 20:09:20.486630] Logo rendered for Citibank at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 20:09:20.487221] Coinflip for Citibank: 0 (sequential)
+[2025-07-14 20:09:20.490356] PDF generated: test\citibank_statement_2251.pdf
+[2025-07-14 20:09:20.494690] Logo rendered for Chase at y=756.0, height=36.0, extra whitespace=40pt
+[2025-07-14 20:09:20.495110] Coinflip for Chase: 1 (two-column)
+[2025-07-14 20:09:20.496378] Daily balances table data for Chase: 31 rows
+[2025-07-14 20:09:20.496764] Page break for Chase: Needed 14pt, had 706.0pt
+[2025-07-14 20:09:20.498709] PDF generated: test\chase_statement_1484.pdf
+[2025-07-14 20:09:20.525546] Logo rendered for Wells Fargo at y=756.0, height=72.0, extra whitespace=40pt
+[2025-07-14 20:09:20.525905] Coinflip for Wells Fargo: 1 (two-column)
+[2025-07-14 20:09:20.527208] Page break for Wells Fargo: Needed 14pt, had 706.0pt
+[2025-07-14 20:09:20.529386] PDF generated: test\wells fargo_statement_9356.pdf
+[2025-07-14 20:09:20.531737] Logo rendered for PNC at y=756.0, height=62.1, extra whitespace=40pt
+[2025-07-14 20:09:20.532032] Coinflip for PNC: 1 (two-column)
+[2025-07-14 20:09:20.532875] Transaction table data for PNC: 14 rows
+[2025-07-14 20:09:20.533373] Page break for PNC: Needed 14pt, had 706.0pt
+[2025-07-14 20:09:20.535188] PDF generated: test\pnc_statement_9101.pdf

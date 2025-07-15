@@ -12,4 +12,7 @@ dependencies = [
     "notebook>=7.4.4",
     "ollama>=0.5.1",
     "reportlab>=4.4.2",
+    "streamlit-pdf-viewer>=0.0.26",
+    "streamlit>=1.46.1",
+    "pillow>=11.3.0",
 ]
