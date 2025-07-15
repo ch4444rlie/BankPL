@@ -1,8 +1,9 @@
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
-from reportlab.lib import colors  # Added for HexColor in create_citi_classic
+from reportlab.lib import colors
 from faker import Faker
+import os
 
 # Shared helper functions
 def wrap_text(c, text, font_name, font_size, max_width):

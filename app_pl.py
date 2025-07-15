@@ -9,18 +9,18 @@ from reportlab.lib.units import inch
 
 # Template functions dictionary
 TEMPLATE_FUNCTIONS = {
-    "citi_classic": create_citi_classic,
-    "chase_classic": create_chase_classic,
-    "wellsfargo_classic": create_wellsfargo_classic,
-    "pnc_classic": create_pnc_classic,
-    "dynamic": create_dynamic_statement
+    "Citi Format": create_citi_classic,
+    "Chase Format": create_chase_classic,
+    "Wells Fargo Format": create_wellsfargo_classic,
+    "PNC Format": create_pnc_classic,
+    "Dynamically Changing Formats": create_dynamic_statement
 }
 
 # Bank names
 BANK_NAMES = ["Chase", "Wells Fargo", "PNC", "Citibank"]
 
 # Streamlit app configuration
-st.set_page_config(page_title="Bank Statement Generator", page_icon="🏦", layout="wide")
+st.set_page_config(page_title="Lightweight Bank Statement Generator", page_icon="🏦", layout="wide")
 
 # Initialize session state
 if 'statement_data' not in st.session_state:
@@ -64,7 +64,7 @@ def generate_random_statement():
         return None, None
 
 # Main app logic
-st.title("Bank Statement Generator")
+st.title("Lightweight Bank Statement Generator")
 st.write("Generate synthetic bank statements for testing purposes.")
 
 if generate_button:
