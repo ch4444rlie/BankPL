@@ -1,41 +1,32 @@
 from faker import Faker
-import os
 import random
 from datetime import datetime, timedelta
+import streamlit as st
 
-
-def generate_statement_data(bank_name, base_dir="."):
+def generate_statement_data(bank_name, account_type="personal"):
     """
     Generate synthetic bank statement data for a given bank.
     
     Args:
         bank_name (str): Name of the bank (e.g., 'Chase', 'Citibank').
-        base_dir (str): Base directory for logo and output paths.
+        account_type (str): Type of account ('personal' or 'business').
     
     Returns:
         dict: Context dictionary with bank statement data.
     
     Raises:
         ValueError: If the bank_name is not supported.
-        OSError: If logo directory cannot be accessed.
     """
     try:
         fake = Faker()
         Faker.seed(random.randint(0, 1000000))
-        output_dir = os.path.join(base_dir, "synthetic_statements")
-        logo_dir = os.path.join(base_dir, "sample_logos")
-
-        # Ensure logo directory exists
-        if not os.path.exists(logo_dir):
-            print(f"Warning: Logo directory {logo_dir} not found. Logo paths will be set to None.")
-            logo_dir = None
 
         # Bank-specific configurations
         bank_configs = {
             "Chase": {
                 "full_name": "JPMorgan Chase Bank, N.A.",
                 "address": "PO Box 659754, San Antonio, TX 78265-9754",
-                "logo": os.path.join(logo_dir, "chase_bank_logo.png") if logo_dir else None,
+                "logo_path": "sample_logos/chase_bank_logo.png",
                 "contact": "1-800-242-7338",
                 "website": "chase.com",
                 "currency": "$"
@@ -43,7 +34,7 @@ def generate_statement_data(bank_name, base_dir="."):
             "Wells Fargo": {
                 "full_name": "Wells Fargo Bank, N.A.",
                 "address": "420 Montgomery Street, San Francisco, CA 94104",
-                "logo": os.path.join(logo_dir, "wellsfargo_logo.png") if logo_dir else None,
+                "logo_path": "sample_logos/wellsfargo_logo.png",
                 "contact": "1-800-225-5935",
                 "website": "wellsfargo.com",
                 "currency": "$"
@@ -51,7 +42,7 @@ def generate_statement_data(bank_name, base_dir="."):
             "PNC": {
                 "full_name": "PNC Bank, National Association",
                 "address": "249 Fifth Avenue, Pittsburgh, PA 15222",
-                "logo": os.path.join(logo_dir, "pnc_logo.png") if logo_dir else None,
+                "logo_path": "sample_logos/pnc_logo.png",
                 "contact": "1-888-PNC-BANK",
                 "website": "pnc.com",
                 "currency": "$"
@@ -59,7 +50,7 @@ def generate_statement_data(bank_name, base_dir="."):
             "Citibank": {
                 "full_name": "Citibank, N.A.",
                 "address": "388 Greenwich Street, New York, NY 10013",
-                "logo": os.path.join(logo_dir, "citibank_logo.png") if logo_dir else None,
+                "logo_path": "sample_logos/citibank_logo.png",
                 "contact": "1-800-374-9700",
                 "website": "citibank.com",
                 "currency": "£"
@@ -72,19 +63,14 @@ def generate_statement_data(bank_name, base_dir="."):
 
         config = bank_configs[bank_name]
         
-        # Verify logo path
-        if config["logo"] and not os.path.exists(config["logo"]):
-            print(f"Warning: Logo file {config['logo']} not found for {bank_name}.")
-            config["logo"] = None
-        
         # Generate synthetic account data
-        account_holder = fake.name()
+        account_holder = fake.company().upper() if account_type == "business" else fake.name().upper()
         account_holder_address = fake.address().replace('\n', ', ')
         account_number = fake.bban()
-        account_type = random.choice(["Chase Total Checking", "Chase Business Complete Checking"]) if bank_name == "Chase" else \
-                       random.choice(["Everyday Checking", "Business Checking"]) if bank_name == "Wells Fargo" else \
-                       random.choice(["Standard Checking", "Business Checking"]) if bank_name == "PNC" else \
-                       random.choice(["Citi Checking", "Citi Business Checking"])
+        account_type_name = random.choice(["Chase Total Checking", "Chase Business Complete Checking"]) if bank_name == "Chase" else \
+                           random.choice(["Everyday Checking", "Business Checking"]) if bank_name == "Wells Fargo" else \
+                           random.choice(["Standard Checking", "Business Checking"]) if bank_name == "PNC" else \
+                           random.choice(["Citi Checking", "Citi Business Checking"])
         
         # Statement period
         end_date = fake.date_between(start_date='-30d', end_date='today')
@@ -105,13 +91,19 @@ def generate_statement_data(bank_name, base_dir="."):
         deposit_descriptions = [
             "Direct Deposit", "ATM Deposit", "Mobile Deposit", "Payroll Credit",
             "Refund", "Transfer from Savings", "Cash Deposit"
+        ] if account_type == "personal" else [
+            "Client Payment", "Invoice Payment", "ACH Credit", "Wire Transfer",
+            "Refund", "Business Deposit", "Cash Deposit"
         ]
         withdrawal_descriptions = [
             "ATM Withdrawal", "Debit Card Purchase", "Online Bill Pay",
             "Check Payment", "Transfer to Savings", "Merchant Payment"
+        ] if account_type == "personal" else [
+            "Vendor Payment", "ACH Debit", "Wire Transfer", "Check Payment",
+            "Payroll Expense", "Merchant Payment", "Business Withdrawal"
         ]
 
-        for _ in range(random.randint(10, 20)):
+        for _ in range(random.randint(10, 25)):
             trans_date = fake.date_between(start_date=start_date, end_date=end_date).strftime('%m/%d')
             trans_type = random.choice(["credit", "debit"])
             amount = round(random.uniform(10, 1000), 2)
@@ -170,10 +162,10 @@ def generate_statement_data(bank_name, base_dir="."):
             "account_holder": account_holder,
             "account_holder_address": account_holder_address,
             "customer_account_number": account_number,
-            "account_type": account_type,
+            "account_type": account_type_name,
             "statement_period": statement_period,
             "statement_date": statement_date,
-            "logo_path": config["logo"],
+            "logo_path": config["logo_path"],
             "currency": config["currency"],
             "website": config["website"],
             "contact": config["contact"],
@@ -214,9 +206,7 @@ def generate_statement_data(bank_name, base_dir="."):
 
         return ctx
 
-    except OSError as e:
-        print(f"Error accessing directories or files: {str(e)}")
-        raise
     except Exception as e:
         print(f"Error in generate_statement_data for {bank_name}: {str(e)}")
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Error in generate_statement_data for {bank_name}: {str(e)}"]
         raise

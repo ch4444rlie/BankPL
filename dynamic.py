@@ -3,23 +3,22 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
 from reportlab.lib import colors
 from datetime import datetime
-import os
 import random
 from PIL import Image
+from io import BytesIO
+import streamlit as st
 from classic_functions import wrap_text, check_page_break
 
-
-def create_dynamic_statement(ctx, output_dir="out"):
+def create_dynamic_statement(ctx, output_buffer):
     """
     Generate a dynamic PDF bank statement with a layout that varies by bank.
     
     Args:
         ctx (dict): Context dictionary with statement data.
-        output_dir (str): Directory to save the PDF.
+        output_buffer (BytesIO): Buffer to write the PDF to.
     
     Raises:
         ValueError: If required context keys are missing.
-        OSError: If file operations fail.
     """
     try:
         # Validate ctx
@@ -34,8 +33,7 @@ def create_dynamic_statement(ctx, output_dir="out"):
         for key in summary_keys:
             if key not in ctx['summary']:
                 print(f"Warning: Missing summary key '{key}' for {ctx['bank_name']}, using default value")
-                with open("layout_debug.log", "a") as log_file:
-                    log_file.write(f"[{datetime.now()}] Warning: Missing summary key '{key}' for {ctx['bank_name']}\n")
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Missing summary key '{key}' for {ctx['bank_name']}"]
                 ctx['summary'][key] = "$0.00"
 
         # Validate transaction data
@@ -44,13 +42,11 @@ def create_dynamic_statement(ctx, output_dir="out"):
             for key in transaction_keys:
                 if key not in tx:
                     print(f"Warning: Missing transaction key '{key}' for {ctx['bank_name']}, using empty string")
-                    with open("layout_debug.log", "a") as log_file:
-                        log_file.write(f"[{datetime.now()}] Warning: Missing transaction key '{key}' for {ctx['bank_name']}\n")
+                    st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Missing transaction key '{key}' for {ctx['bank_name']}"]
                     tx[key] = ""
 
         bank_name = ctx['bank_name']
-        output_file = os.path.join(output_dir, f"{bank_name.lower()}_statement_{ctx['customer_account_number'][-4:]}.pdf")
-        c = canvas.Canvas(output_file, pagesize=letter)
+        c = canvas.Canvas(output_buffer, pagesize=letter)
         PAGE_WIDTH, PAGE_HEIGHT = letter
         margin = 0.5 * inch
         usable_width = PAGE_WIDTH - 2 * margin
@@ -64,17 +60,17 @@ def create_dynamic_statement(ctx, output_dir="out"):
                     return value.format(**{k: v for k, v in ctx.items() if isinstance(v, str)})
                 except (KeyError, ValueError) as e:
                     print(f"Warning: Formatting failed for value '{value}': {e}")
-                    with open("layout_debug.log", "a") as log_file:
-                        log_file.write(f"[{datetime.now()}] Warning: Formatting failed for value '{value}' in {bank_name}: {e}\n")
+                    st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Formatting failed for value '{value}' in {bank_name}: {e}"]
                     return value
             return str(value)
 
-        # Render Header
+        # Render Header with logo
         logo_path = ctx.get('logo_path', '')
         logo_align = random.choice(['left', 'center', 'right'])
-        if logo_path and os.path.exists(logo_path):
+        if logo_path:
             try:
-                img = Image.open(logo_path)
+                img_data = open(logo_path, 'rb').read()
+                img = Image.open(BytesIO(img_data))
                 img_width, img_height = img.size
                 target_width = 1.0 * inch if bank_name.lower() == 'wells fargo' else 1.5 * inch
                 aspect_ratio = img_width / img_height if img_height > 0 else 1
@@ -86,20 +82,17 @@ def create_dynamic_statement(ctx, output_dir="out"):
                 c.drawImage(logo_path, x_logo, y_position - target_height - 10, 
                             width=target_width, height=target_height, mask='auto')
                 y_position -= target_height + 40
-                with open("layout_debug.log", "a") as log_file:
-                    log_file.write(f"[{datetime.now()}] Logo rendered for {bank_name} at y={y_position + target_height + 40}, height={target_height}, extra whitespace=40pt\n")
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Logo rendered for {bank_name} at y={y_position + target_height + 40}, height={target_height}, extra whitespace=40pt"]
             except Exception as e:
                 print(f"Warning: Failed to render logo for {bank_name}: {e}")
-                with open("layout_debug.log", "a") as log_file:
-                    log_file.write(f"[{datetime.now()}] Warning: Failed to render logo for {bank_name}: {e}\n")
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Failed to render logo for {bank_name}: {e}"]
                 y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, "Helvetica", 12)
                 c.setFont("Helvetica", 12)
                 c.drawString(margin, y_position, f"[Logo: {bank_name}]")
                 y_position -= 14
         else:
-            print(f"Warning: Logo not rendered for {bank_name}, invalid path: {logo_path}")
-            with open("layout_debug.log", "a") as log_file:
-                log_file.write(f"[{datetime.now()}] Warning: Logo not rendered for {bank_name}, invalid path: {logo_path}\n")
+            print(f"Warning: Logo path not provided for {bank_name}")
+            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Logo path not provided for {bank_name}"]
             y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, "Helvetica", 12)
             c.setFont("Helvetica", 12)
             c.drawString(margin, y_position, f"[Logo: {bank_name}]")
@@ -196,7 +189,7 @@ def create_dynamic_statement(ctx, output_dir="out"):
                         ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00"), "", ""],
                         ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00"), "", ""]
                     ],
-                    "col_widths": [0.375, 0.125, 0.375, 0.125],  # For sequential layout: 4 columns
+                    "col_widths": [0.375, 0.125, 0.375, 0.125],
                     "font": "Helvetica",
                     "size": 10,
                     "style": "none"
@@ -233,8 +226,7 @@ def create_dynamic_statement(ctx, output_dir="out"):
         # Coinflip for layout
         coinflip = random.randint(0, 1)
         print(f"Coinflip for {bank_name}: {coinflip} ({'sequential' if coinflip == 0 else 'two-column'})")
-        with open("layout_debug.log", "a") as log_file:
-            log_file.write(f"[{datetime.now()}] Coinflip for {bank_name}: {coinflip} ({'sequential' if coinflip == 0 else 'two-column'})\n")
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Coinflip for {bank_name}: {coinflip} ({'sequential' if coinflip == 0 else 'two-column'})"]
 
         # Ensure specific section ordering
         def get_section_order(title):
@@ -301,15 +293,13 @@ def create_dynamic_statement(ctx, output_dir="out"):
                         elif content.get("data_key") == "daily_balances":
                             data = [[b.get("date", ""), b.get("amount", "")] for b in ctx.get("daily_balances", [])]
                             print(f"Daily balances table data for {bank_name}: {len(data)} rows")
-                            with open("layout_debug.log", "a") as log_file:
-                                log_file.write(f"[{datetime.now()}] Daily balances table data for {bank_name}: {len(data)} rows\n")
+                            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Daily balances table data for {bank_name}: {len(data)} rows"]
                         elif content.get("data_key") == "transaction_and_interest_summary":
                             data = content.get("data", [])
                         
                         if not data:
                             print(f"Warning: No data for table '{section['title']}' for {bank_name}")
-                            with open("layout_debug.log", "a") as log_file:
-                                log_file.write(f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}\n")
+                            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}"]
                             data = [["No data available"] * len(content.get("headers", []))]
 
                         col_widths = [usable_width * w for w in content.get("col_widths", [1/len(data[0])]*len(data[0]))]
@@ -408,8 +398,7 @@ def create_dynamic_statement(ctx, output_dir="out"):
                                 ])
                         if not data:
                             print(f"Warning: No data for table '{section['title']}' for {bank_name}")
-                            with open("layout_debug.log", "a") as log_file:
-                                log_file.write(f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}\n")
+                            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}"]
                             data = [["No data available"] * len(content.get("headers", []))]
 
                         col_widths = [usable_width * w for w in content.get("col_widths", [1/len(data[0])]*len(data[0]))]
@@ -449,7 +438,7 @@ def create_dynamic_statement(ctx, output_dir="out"):
                         y_position -= 12
                     y_position -= 12
 
-            # Render PNC Transaction and Interest Summary in two-column layout (stacked vertically)
+            # Render PNC Transaction and Interest Summary in two-column layout
             section = next((s for s in pnc_sections if s["title"] == "Transaction and Interest Summary"), None)
             if section:
                 y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 20, "Helvetica", 14)
@@ -467,7 +456,7 @@ def create_dynamic_statement(ctx, output_dir="out"):
                             ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0")],
                             ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0")],
                             ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0")],
-                            ["", ""],  # Spacer
+                            ["", ""],
                             ["Interest Summary", ""],
                             ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%")],
                             ["Days in period", ctx.get('summary', {}).get('days_in_period', "30")],
@@ -477,11 +466,10 @@ def create_dynamic_statement(ctx, output_dir="out"):
                         ]
                         if not data:
                             print(f"Warning: No data for table '{section['title']}' for {bank_name}")
-                            with open("layout_debug.log", "a") as log_file:
-                                log_file.write(f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}\n")
+                            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}"]
                             data = [["No data available"] * 2]
 
-                        col_widths = [col_width * w for w in [0.75, 0.25]]  # 2-column layout for stacked table
+                        col_widths = [col_width * w for w in [0.75, 0.25]]
                         row_height = content["size"] + 4
                         header_height = content["size"] + 4
 
@@ -520,13 +508,11 @@ def create_dynamic_statement(ctx, output_dir="out"):
                                 t.get("ending_balance", "")
                             ])
                         print(f"Transaction table data for {bank_name}: {len(data)} rows")
-                        with open("layout_debug.log", "a") as log_file:
-                            log_file.write(f"[{datetime.now()}] Transaction table data for {bank_name}: {len(data)} rows\n")
+                        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Transaction table data for {bank_name}: {len(data)} rows"]
                         
                         if not data:
                             print(f"Warning: No data for table '{section['title']}' for {bank_name}")
-                            with open("layout_debug.log", "a") as log_file:
-                                log_file.write(f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}\n")
+                            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}"]
                             data = [["No data available"] * len(content.get("headers", []))]
 
                         col_widths = [usable_width * w for w in content.get("col_widths", [1/len(data[0])]*len(data[0]))]
@@ -534,7 +520,6 @@ def create_dynamic_statement(ctx, output_dir="out"):
                         row_height = content["size"] + 4
                         header_height = content["size"] + 4 if headers else 0
                         
-                        # Only render headers if there's enough space for at least one row
                         if headers and y_position - (header_height + row_height) >= margin:
                             c.setFont(content["font"], content["size"])
                             for i, header in enumerate(headers):
@@ -578,13 +563,11 @@ def create_dynamic_statement(ctx, output_dir="out"):
                     if content["type"] == "table":
                         data = [[b.get("date", ""), b.get("amount", "")] for b in ctx.get("daily_balances", [])]
                         print(f"Daily balances table data for {bank_name}: {len(data)} rows")
-                        with open("layout_debug.log", "a") as log_file:
-                            log_file.write(f"[{datetime.now()}] Daily balances table data for {bank_name}: {len(data)} rows\n")
+                        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Daily balances table data for {bank_name}: {len(data)} rows"]
                         
                         if not data:
                             print(f"Warning: No data for table '{section['title']}' for {bank_name}")
-                            with open("layout_debug.log", "a") as log_file:
-                                log_file.write(f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}\n")
+                            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: No data for table '{section['title']}' for {bank_name}"]
                             data = [["No data available"] * len(content.get("headers", []))]
 
                         col_widths = [usable_width * w for w in content.get("col_widths", [1/len(data[0])]*len(data[0]))]
@@ -592,7 +575,6 @@ def create_dynamic_statement(ctx, output_dir="out"):
                         row_height = content["size"] + 4
                         header_height = content["size"] + 4 if headers else 0
                         
-                        # Only render headers if there's enough space for at least one row
                         if headers and y_position - (header_height + row_height) >= margin:
                             c.setFont(content["font"], content["size"])
                             for i, header in enumerate(headers):
@@ -642,17 +624,14 @@ def create_dynamic_statement(ctx, output_dir="out"):
         y_position -= 12
 
         c.save()
-        print(f"PDF generated: {output_file}")
-        with open("layout_debug.log", "a") as log_file:
-            log_file.write(f"[{datetime.now()}] PDF generated: {output_file}\n")
+        print(f"PDF generated for {bank_name}")
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] PDF generated for {bank_name}"]
     
-    except (ValueError, OSError) as e:
+    except ValueError as e:
         print(f"Error in create_dynamic_statement for {bank_name}: {str(e)}")
-        with open("layout_debug.log", "a") as log_file:
-            log_file.write(f"[{datetime.now()}] Error in create_dynamic_statement for {bank_name}: {str(e)}\n")
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Error in create_dynamic_statement for {bank_name}: {str(e)}"]
         raise
     except Exception as e:
         print(f"Unexpected error in create_dynamic_statement for {bank_name}: {str(e)}")
-        with open("layout_debug.log", "a") as log_file:
-            log_file.write(f"[{datetime.now()}] Unexpected error in create_dynamic_statement for {bank_name}: {str(e)}\n")
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Unexpected error in create_dynamic_statement for {bank_name}: {str(e)}"]
         raise
