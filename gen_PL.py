@@ -1,7 +1,7 @@
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
+
 from reportlab.lib.units import inch
 from faker import Faker
 import os
