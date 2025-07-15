@@ -1,21 +1,10 @@
 import streamlit as st
 import base64
-import random
 from datetime import datetime
 from io import BytesIO
-from reportlab.lib.units import inch
 from streamlit_pdf_viewer import pdf_viewer
 from randomize import generate_statement_data
-from classic_functions import create_citi_classic, create_chase_classic, create_wellsfargo_classic, create_pnc_classic
 from dynamic import create_dynamic_statement
-
-# Bank-to-template mapping
-BANK_TEMPLATE_FUNCTIONS = {
-    "Chase": create_chase_classic,
-    "Wells Fargo": create_wellsfargo_classic,
-    "PNC": create_pnc_classic,
-    "Citibank": create_citi_classic
-}
 
 # Bank names
 BANK_NAMES = ["Chase", "Wells Fargo", "PNC", "Citibank"]
@@ -23,11 +12,11 @@ BANK_NAMES = ["Chase", "Wells Fargo", "PNC", "Citibank"]
 # Streamlit app configuration
 st.set_page_config(page_title="Lightweight Bank Statement Generator", page_icon="🏦", layout="wide")
 
-# Custom CSS for buttons (normalized size, single-line text, professional look)
+# Custom CSS for buttons (match slider width, professional look)
 st.markdown("""
 <style>
 .stButton > button {
-    width: 120px;
+    width: 100%;
     height: 30px;
     font-size: 14px;
     line-height: 30px;
@@ -36,6 +25,9 @@ st.markdown("""
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.stSlider > div {
+    width: 100%;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -84,27 +76,19 @@ with st.sidebar:
     st.subheader("Number of Transactions")
     num_transactions = st.slider("Number of Transactions", min_value=3, max_value=25, value=5, step=1)
 
-    # Generate and Randomize buttons
+    # Generate button
     st.markdown("<br>", unsafe_allow_html=True)
-    cols = st.columns(2)
-    with cols[0]:
-        if st.button("Generate Statement", key="sidebar_generate_button"):
-            if not selected_bank:
-                st.error("Please select a bank first.")
-            else:
-                st.session_state['trigger_generate'] = True
-                st.session_state['is_random'] = False
-    with cols[1]:
-        if st.button("Randomize", key="sidebar_randomize_button"):
+    if st.button("Generate Statement", key="sidebar_generate_button"):
+        if not selected_bank:
+            st.error("Please select a bank first.")
+        else:
             st.session_state['trigger_generate'] = True
-            st.session_state['is_random'] = True
 
 # Main app logic
 st.title("Lightweight Synthetic Bank Statement Generator")
 st.markdown("""  
 - Create your synthetic bank statement with the sidebar options.  
-- Select **Personal** or **Business** account type to customize transaction categories.  
-- Use **Generate Statement** for a bank-specific statement or **Randomize** for a dynamic layout.  
+- Select a **Bank**, **Personal** or **Business** account type, and number of transactions.  
 - Download the generated PDF!
 """)
 
@@ -114,20 +98,12 @@ with st.expander("View Logs"):
 
 # Handle generation
 if st.session_state['trigger_generate']:
-    if not (selected_bank or st.session_state.get('is_random', False)):
-        st.error("Please select a bank or click Randomize.")
+    if not selected_bank:
+        st.error("Please select a bank first.")
         st.session_state['trigger_generate'] = False
     else:
-        with st.spinner(f"Generating {'random' if st.session_state.get('is_random', False) else selected_bank} {account_type} statement..."):
+        with st.spinner(f"Generating {selected_bank} {account_type} statement..."):
             try:
-                if st.session_state.get('is_random', False):
-                    selected_bank = random.choice(BANK_NAMES)
-                    template_func = create_dynamic_statement
-                    template_name = "Dynamic Layout"
-                else:
-                    template_func = BANK_TEMPLATE_FUNCTIONS[selected_bank]
-                    template_name = f"{selected_bank} Classic"
-                
                 ctx = generate_statement_data(selected_bank, account_type=account_type)
                 # Slice transactions to user-specified number
                 ctx['transactions'] = ctx['transactions'][:num_transactions]
@@ -138,14 +114,14 @@ if st.session_state['trigger_generate']:
                 ctx['summary']['transactions_count'] = str(len(ctx['transactions']))
                 
                 pdf_buffer = BytesIO()
-                template_func(ctx, output_buffer=pdf_buffer)
+                create_dynamic_statement(ctx, output_buffer=pdf_buffer)
                 pdf_filename = f"{selected_bank.lower()}_statement_{ctx['customer_account_number'][-4:]}.pdf"
                 st.session_state['statement_data'] = ctx
                 st.session_state['pdf_buffer'] = pdf_buffer
                 st.session_state['pdf_filename'] = pdf_filename
                 st.session_state['trigger_generate'] = False
-                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Statement generated for {selected_bank} with {template_name}"]
-                st.success(f"Statement generated for {selected_bank} with {template_name}")
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Statement generated for {selected_bank} with Dynamic Layout"]
+                st.success(f"Statement generated for {selected_bank} with Dynamic Layout")
             except Exception as e:
                 st.error(f"Error generating statement: {str(e)}")
                 st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Error generating statement: {str(e)}"]
@@ -196,4 +172,4 @@ if st.session_state['statement_data'] and st.session_state['pdf_buffer']:
 # Default preview message
 else:
     st.subheader(f"Preview: {selected_bank or 'No Bank Selected'} {account_type.capitalize()} Statement")
-    st.markdown("Select a bank, account type, and number of transactions in the sidebar, then click 'Generate Statement' or 'Randomize' to preview your synthetic bank statement.")
+    st.markdown("Select a bank, account type, and number of transactions, then click 'Generate Statement' to preview your synthetic bank statement.")

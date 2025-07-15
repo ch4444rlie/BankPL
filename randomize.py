@@ -12,7 +12,7 @@ def generate_statement_data(bank_name, account_type="personal"):
         account_type (str): Type of account ('personal' or 'business').
     
     Returns:
-        dict: Context dictionary with bank statement data.
+        dict: Context dictionary with bank statement data, including sections.
     
     Raises:
         ValueError: If the bank_name is not supported.
@@ -155,6 +155,110 @@ def generate_statement_data(bank_name, account_type="personal"):
                 "amount": f"{config['currency']}{current_balance:.2f}"
             })
 
+        # Define bank-specific sections
+        sections = [
+            {
+                "title": "Important Account Information",
+                "content": [{
+                    "type": "text",
+                    "value": (
+                        "Effective July 1, 2025, the monthly service fee for {account_type} accounts will increase to $15 unless you maintain a minimum daily balance of $1,500, have $500 in qualifying direct deposits, or maintain a linked savings account with a balance of $5,000 or more. "
+                        "For questions, visit {website} or call {contact}."
+                    ),
+                    "font": "Helvetica",
+                    "size": 10,
+                    "wrap": True
+                }]
+            },
+            {
+                "title": "Account Summary",
+                "content": [{
+                    "type": "table",
+                    "data": [
+                        ["Beginning Balance", f"{config['currency']}{beginning_balance:.2f}"],
+                        ["Deposits and Credits", f"{config['currency']}{deposits_total:.2f}"],
+                        ["Withdrawals and Debits", f"{config['currency']}{withdrawals_total:.2f}"],
+                        ["Ending Balance", f"{config['currency']}{balance:.2f}"]
+                    ],
+                    "col_widths": [0.75, 0.25],
+                    "font": "Helvetica",
+                    "size": 10,
+                    "style": "none"
+                }]
+            },
+            {
+                "title": "Transaction History",
+                "content": [{
+                    "type": "table",
+                    "data_key": "transactions",
+                    "headers": ["Date", "Description", "Amount", "Balance"],
+                    "col_widths": [0.15, 0.45, 0.20, 0.20],
+                    "font": "Helvetica",
+                    "size": 10,
+                    "style": "none"
+                }]
+            }
+        ]
+
+        # Add bank-specific sections
+        if bank_name.lower() == 'wells fargo':
+            sections.insert(0, {
+                "title": "Your Wells Fargo",
+                "content": [{
+                    "type": "text",
+                    "value": (
+                        "It’s a great time to talk with a banker about how Wells Fargo’s accounts "
+                        "and services can help you stay competitive by saving you time and money. "
+                        "To find out how we can help, stop by any Wells Fargo location or call us at "
+                        "{contact}."
+                    ),
+                    "font": "Helvetica",
+                    "size": 10,
+                    "wrap": True
+                }]
+            })
+        if bank_name.lower() == 'pnc':
+            sections.insert(2, {
+                "title": "Transaction and Interest Summary",
+                "content": [{
+                    "type": "table",
+                    "data_key": "transaction_and_interest_summary",
+                    "data": [
+                        ["Transaction Summary", "", "", ""],
+                        ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0"), "", ""],
+                        ["Check-card POS transactions", ctx.get('summary', {}).get('pos_transactions', "0"), "", ""],
+                        ["Check-card/virtual POS PIN txn", ctx.get('summary', {}).get('pos_pin_transactions', "0"), "", ""],
+                        ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0"), "", ""],
+                        ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0"), "", ""],
+                        ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0"), "", ""],
+                        ["", "", "", ""],
+                        ["Interest Summary", "", "", ""],
+                        ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%"), "", ""],
+                        ["Days in period", ctx.get('summary', {}).get('days_in_period', "30"), "", ""],
+                        ["Avg collected balance", ctx.get('summary', {}).get('average_collected_balance', "$0.00"), "", ""],
+                        ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00"), "", ""],
+                        ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00"), "", ""]
+                    ],
+                    "col_widths": [0.375, 0.125, 0.375, 0.125],
+                    "font": "Helvetica",
+                    "size": 10,
+                    "style": "none"
+                }]
+            })
+        if bank_name.lower() == 'chase':
+            sections.append({
+                "title": "Daily Ending Balance",
+                "content": [{
+                    "type": "table",
+                    "data_key": "daily_balances",
+                    "headers": ["Date", "Amount"],
+                    "col_widths": [0.5, 0.5],
+                    "font": "Helvetica",
+                    "size": 10,
+                    "style": "none"
+                }]
+            })
+
         # Context dictionary
         ctx = {
             "bank_name": bank_name,
@@ -201,7 +305,9 @@ def generate_statement_data(bank_name, account_type="personal"):
             "customer_iban": fake.iban() if bank_name == "Citibank" else "",
             "client_number": fake.uuid4() if bank_name == "Citibank" else "",
             "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=80).strftime('%m/%d/%Y') if bank_name == "Citibank" else "",
-            "total_pages": 1
+            "total_pages": 1,
+            "layout_style": "two-column" if bank_name.lower() == "pnc" and random.random() > 0.3 else "sequential",
+            "sections": sections
         }
 
         return ctx
