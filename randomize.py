@@ -155,6 +155,32 @@ def generate_statement_data(bank_name, account_type="personal"):
                 "amount": f"{config['currency']}{current_balance:.2f}"
             })
 
+        # Define summary for use in sections
+        summary = {
+            "beginning_balance": f"{config['currency']}{beginning_balance:.2f}",
+            "deposits_count": str(deposits_count),
+            "deposits_total": f"{config['currency']}{deposits_total:.2f}",
+            "withdrawals_count": str(withdrawals_count),
+            "withdrawals_total": f"{config['currency']}{withdrawals_total:.2f}",
+            "ending_balance": f"{config['currency']}{balance:.2f}",
+            "transactions_count": str(len(transactions)),
+            "overdraft_protection1": "None",
+            "overdraft_status": "opted out",
+            "average_balance": f"{config['currency']}{round(random.uniform(1000, 10000), 2):.2f}",
+            "fees": f"{config['currency']}{round(random.uniform(0, 50), 2):.2f}",
+            "checks_written": str(random.randint(0, 5)),
+            "pos_transactions": str(random.randint(0, 10)),
+            "pos_pin_transactions": str(random.randint(0, 5)),
+            "total_atm_transactions": str(random.randint(0, 5)),
+            "pnc_atm_transactions": str(random.randint(0, 3)),
+            "other_atm_transactions": str(random.randint(0, 2)),
+            "apy_earned": f"{random.uniform(0.01, 0.05):.2%}",
+            "days_in_period": "30",
+            "average_collected_balance": f"{config['currency']}{round(random.uniform(1000, 10000), 2):.2f}",
+            "interest_paid_period": f"{config['currency']}{round(random.uniform(0, 10), 2):.2f}",
+            "interest_paid_ytd": f"{config['currency']}{round(random.uniform(0, 50), 2):.2f}"
+        }
+
         # Define bank-specific sections
         sections = [
             {
@@ -175,10 +201,10 @@ def generate_statement_data(bank_name, account_type="personal"):
                 "content": [{
                     "type": "table",
                     "data": [
-                        ["Beginning Balance", f"{config['currency']}{beginning_balance:.2f}"],
-                        ["Deposits and Credits", f"{config['currency']}{deposits_total:.2f}"],
-                        ["Withdrawals and Debits", f"{config['currency']}{withdrawals_total:.2f}"],
-                        ["Ending Balance", f"{config['currency']}{balance:.2f}"]
+                        ["Beginning Balance", summary["beginning_balance"]],
+                        ["Deposits and Credits", summary["deposits_total"]],
+                        ["Withdrawals and Debits", summary["withdrawals_total"]],
+                        ["Ending Balance", summary["ending_balance"]]
                     ],
                     "col_widths": [0.75, 0.25],
                     "font": "Helvetica",
@@ -222,22 +248,21 @@ def generate_statement_data(bank_name, account_type="personal"):
                 "title": "Transaction and Interest Summary",
                 "content": [{
                     "type": "table",
-                    "data_key": "transaction_and_interest_summary",
                     "data": [
                         ["Transaction Summary", "", "", ""],
-                        ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0"), "", ""],
-                        ["Check-card POS transactions", ctx.get('summary', {}).get('pos_transactions', "0"), "", ""],
-                        ["Check-card/virtual POS PIN txn", ctx.get('summary', {}).get('pos_pin_transactions', "0"), "", ""],
-                        ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0"), "", ""],
-                        ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0"), "", ""],
-                        ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0"), "", ""],
+                        ["Checks paid/written", summary.get("checks_written", "0"), "", ""],
+                        ["Check-card POS transactions", summary.get("pos_transactions", "0"), "", ""],
+                        ["Check-card/virtual POS PIN txn", summary.get("pos_pin_transactions", "0"), "", ""],
+                        ["Total ATM transactions", summary.get("total_atm_transactions", "0"), "", ""],
+                        ["PNC Bank ATM transactions", summary.get("pnc_atm_transactions", "0"), "", ""],
+                        ["Other Bank ATM transactions", summary.get("other_atm_transactions", "0"), "", ""],
                         ["", "", "", ""],
                         ["Interest Summary", "", "", ""],
-                        ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%"), "", ""],
-                        ["Days in period", ctx.get('summary', {}).get('days_in_period', "30"), "", ""],
-                        ["Avg collected balance", ctx.get('summary', {}).get('average_collected_balance', "$0.00"), "", ""],
-                        ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00"), "", ""],
-                        ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00"), "", ""]
+                        ["APY earned", summary.get("apy_earned", "0.00%"), "", ""],
+                        ["Days in period", summary.get("days_in_period", "30"), "", ""],
+                        ["Avg collected balance", summary.get("average_collected_balance", "$0.00"), "", ""],
+                        ["Interest paid this period", summary.get("interest_paid_period", "$0.00"), "", ""],
+                        ["YTD interest paid", summary.get("interest_paid_ytd", "$0.00"), "", ""]
                     ],
                     "col_widths": [0.375, 0.125, 0.375, 0.125],
                     "font": "Helvetica",
@@ -259,6 +284,21 @@ def generate_statement_data(bank_name, account_type="personal"):
                 }]
             })
 
+        # Randomize section order (excluding bank-specific required sections)
+        fixed_sections = ["Your Wells Fargo", "Transaction and Interest Summary", "Daily Ending Balance"]
+        reorderable_sections = [s for s in sections if s["title"] not in fixed_sections]
+        random.shuffle(reorderable_sections)
+        fixed_sections_dict = {s["title"]: s for s in sections if s["title"] in fixed_sections}
+        sections = []
+        if bank_name.lower() == 'wells fargo' and "Your Wells Fargo" in fixed_sections_dict:
+            sections.append(fixed_sections_dict["Your Wells Fargo"])
+        sections.extend(reorderable_sections[:2])  # Add first two reorderable sections
+        if bank_name.lower() == 'pnc' and "Transaction and Interest Summary" in fixed_sections_dict:
+            sections.append(fixed_sections_dict["Transaction and Interest Summary"])
+        sections.extend(reorderable_sections[2:])  # Add remaining reorderable sections
+        if bank_name.lower() == 'chase' and "Daily Ending Balance" in fixed_sections_dict:
+            sections.append(fixed_sections_dict["Daily Ending Balance"])
+
         # Context dictionary
         ctx = {
             "bank_name": bank_name,
@@ -273,30 +313,7 @@ def generate_statement_data(bank_name, account_type="personal"):
             "currency": config["currency"],
             "website": config["website"],
             "contact": config["contact"],
-            "summary": {
-                "beginning_balance": f"{config['currency']}{beginning_balance:.2f}",
-                "deposits_count": str(deposits_count),
-                "deposits_total": f"{config['currency']}{deposits_total:.2f}",
-                "withdrawals_count": str(withdrawals_count),
-                "withdrawals_total": f"{config['currency']}{withdrawals_total:.2f}",
-                "ending_balance": f"{config['currency']}{balance:.2f}",
-                "transactions_count": str(len(transactions)),
-                "overdraft_protection1": "None",
-                "overdraft_status": "opted out",
-                "average_balance": f"{config['currency']}{round(random.uniform(1000, 10000), 2):.2f}",
-                "fees": f"{config['currency']}{round(random.uniform(0, 50), 2):.2f}",
-                "checks_written": str(random.randint(0, 5)),
-                "pos_transactions": str(random.randint(0, 10)),
-                "pos_pin_transactions": str(random.randint(0, 5)),
-                "total_atm_transactions": str(random.randint(0, 5)),
-                "pnc_atm_transactions": str(random.randint(0, 3)),
-                "other_atm_transactions": str(random.randint(0, 2)),
-                "apy_earned": f"{random.uniform(0.01, 0.05):.2%}",
-                "days_in_period": "30",
-                "average_collected_balance": f"{config['currency']}{round(random.uniform(1000, 10000), 2):.2f}",
-                "interest_paid_period": f"{config['currency']}{round(random.uniform(0, 10), 2):.2f}",
-                "interest_paid_ytd": f"{config['currency']}{round(random.uniform(0, 50), 2):.2f}"
-            },
+            "summary": summary,
             "transactions": transactions,
             "deposits": deposits,
             "withdrawals": withdrawals,

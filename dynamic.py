@@ -56,7 +56,7 @@ def create_dynamic_statement(ctx, output_buffer):
     try:
         # Validate ctx
         required_keys = ['bank_name', 'account_holder', 'account_holder_address', 'account_type', 
-                         'summary', 'transactions', 'website', 'contact', 'customer_account_number', 'sections']
+                         'summary', 'transactions', 'website', 'contact', 'customer_account_number']
         for key in required_keys:
             if key not in ctx:
                 raise ValueError(f"Missing required context key: {key}")
@@ -85,6 +85,12 @@ def create_dynamic_statement(ctx, output_buffer):
         usable_width = PAGE_WIDTH - 2 * margin
         y_position = PAGE_HEIGHT - margin
 
+        # Set consistent document-wide text styles
+        doc_style = get_random_text_style(is_heading=False)
+        header_style = get_random_text_style(is_heading=True)
+        header_style["font"] = doc_style["font"]  # Same font for consistency
+        header_style["color"] = doc_style["color"]  # Same color for consistency
+
         # Local helper function for text formatting
         def format_text(value, ctx):
             if isinstance(value, str):
@@ -107,7 +113,7 @@ def create_dynamic_statement(ctx, output_buffer):
                 target_width = 1.0 * inch if bank_name.lower() == 'wells fargo' else 1.5 * inch
                 aspect_ratio = img_width / img_height if img_height > 0 else 1
                 target_height = target_width / aspect_ratio
-                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, target_height + 40, "Helvetica", 12)
+                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, target_height + 40, doc_style["font"], doc_style["size"])
                 x_logo = (margin if logo_align == 'left' else 
                           PAGE_WIDTH / 2 - target_width / 2 if logo_align == 'center' else 
                           PAGE_WIDTH - margin - target_width)
@@ -118,52 +124,51 @@ def create_dynamic_statement(ctx, output_buffer):
             except Exception as e:
                 print(f"Warning: Failed to render logo for {bank_name}: {e}")
                 st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Failed to render logo for {bank_name}: {e}"]
-                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, "Helvetica", 12)
-                c.setFont("Helvetica", 12)
+                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, doc_style["font"], doc_style["size"])
+                c.setFont(doc_style["font"], doc_style["size"])
+                c.setFillColor(doc_style["color"])
                 c.drawString(margin, y_position, f"[Logo: {bank_name}]")
-                y_position -= 14
+                y_position -= doc_style["size"] + 4
         else:
             print(f"Warning: Logo path not provided for {bank_name}")
             st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: Logo path not provided for {bank_name}"]
-            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, "Helvetica", 12)
-            c.setFont("Helvetica", 12)
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 14, doc_style["font"], doc_style["size"])
+            c.setFont(doc_style["font"], doc_style["size"])
+            c.setFillColor(doc_style["color"])
             c.drawString(margin, y_position, f"[Logo: {bank_name}]")
-            y_position -= 14
+            y_position -= doc_style["size"] + 4
 
         # Single-column header
-        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 28, "Helvetica", 12)
-        header_style = get_random_text_style(is_heading=True)
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, header_style["size"] + 4, header_style["font"], header_style["size"])
         c.setFont(header_style["font"], header_style["size"])
         c.setFillColor(header_style["color"])
         c.drawString(margin, y_position, format_text("{account_holder}", ctx))
         y_position -= header_style["size"] + 4
         address_lines = format_text("{account_holder_address}", ctx).split(',')
-        body_style = get_random_text_style(is_heading=False)
-        c.setFont(body_style["font"], body_style["size"])
-        c.setFillColor(body_style["color"])
+        c.setFont(doc_style["font"], doc_style["size"])
+        c.setFillColor(doc_style["color"])
         for line in address_lines:
             line = line.strip()
             if line:
-                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, body_style["size"] + 4, body_style["font"], body_style["size"])
+                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, doc_style["size"] + 4, doc_style["font"], doc_style["size"])
                 c.drawString(margin, y_position, line)
-                y_position -= body_style["size"] + 4
-        title_style = get_random_text_style(is_heading=True)
-        c.setFont(title_style["font"], title_style["size"])
-        c.setFillColor(title_style["color"])
-        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, title_style["size"] + 4, title_style["font"], title_style["size"])
+                y_position -= doc_style["size"] + 4
+        c.setFont(header_style["font"], header_style["size"])
+        c.setFillColor(header_style["color"])
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, header_style["size"] + 4, header_style["font"], header_style["size"])
         c.drawCentredString(PAGE_WIDTH / 2, y_position, format_text("{account_type} Statement", ctx))
-        y_position -= title_style["size"] + 12
+        y_position -= header_style["size"] + 12
 
         # Get layout style from ctx or randomize
         layout_style = ctx.get('layout_style', 'sequential' if random.randint(0, 1) == 0 else 'two-column')
         print(f"Layout for {bank_name}: {layout_style}")
         st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Layout for {bank_name}: {layout_style}"]
 
-        # Use user-defined sections
+        # Use user-defined sections or fallback to bank-specific defaults
         middle_sections = ctx.get('sections', [])
         if not middle_sections:
-            print(f"Warning: No sections provided for {bank_name}, using default sections")
-            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: No sections provided for {bank_name}, using default sections"]
+            print(f"Warning: No sections provided for {bank_name}, using bank-specific default sections")
+            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Warning: No sections provided for {bank_name}, using bank-specific default sections"]
             middle_sections = [
                 {
                     "title": "Important Account Information",
@@ -207,29 +212,70 @@ def create_dynamic_statement(ctx, output_buffer):
                     }]
                 }
             ]
-
-        # Define section order
-        def get_section_order(title):
-            order = {
-                "Welcome Message": 1,
-                "Important Account Information": 2,
-                "Account Summary": 3,
-                "Transaction and Interest Summary": 4,
-                "Transaction History": 5,
-                "Daily Ending Balance": 6
-            }
-            return order.get(title, 10)
-
-        # Sort sections
-        middle_sections.sort(key=lambda x: get_section_order(x["title"]))
+            if bank_name.lower() == 'wells fargo':
+                middle_sections.insert(0, {
+                    "title": "Your Wells Fargo",
+                    "content": [{
+                        "type": "text",
+                        "value": (
+                            "It’s a great time to talk with a banker about how Wells Fargo’s accounts "
+                            "and services can help you stay competitive by saving you time and money. "
+                            "To find out how we can help, stop by any Wells Fargo location or call us at "
+                            "{contact}."
+                        ),
+                        "font": "Helvetica",
+                        "size": 10,
+                        "wrap": True
+                    }]
+                })
+            if bank_name.lower() == 'pnc':
+                middle_sections.insert(2, {
+                    "title": "Transaction and Interest Summary",
+                    "content": [{
+                        "type": "table",
+                        "data_key": "transaction_and_interest_summary",
+                        "data": [
+                            ["Transaction Summary", "", "", ""],
+                            ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0"), "", ""],
+                            ["Check-card POS transactions", ctx.get('summary', {}).get('pos_transactions', "0"), "", ""],
+                            ["Check-card/virtual POS PIN txn", ctx.get('summary', {}).get('pos_pin_transactions', "0"), "", ""],
+                            ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0"), "", ""],
+                            ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0"), "", ""],
+                            ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0"), "", ""],
+                            ["", "", "", ""],
+                            ["Interest Summary", "", "", ""],
+                            ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%"), "", ""],
+                            ["Days in period", ctx.get('summary', {}).get('days_in_period', "30"), "", ""],
+                            ["Avg collected balance", ctx.get('summary', {}).get('average_collected_balance', "$0.00"), "", ""],
+                            ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00"), "", ""],
+                            ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00"), "", ""]
+                        ],
+                        "col_widths": [0.375, 0.125, 0.375, 0.125],
+                        "font": "Helvetica",
+                        "size": 10,
+                        "style": "none"
+                    }]
+                })
+            if bank_name.lower() == 'chase':
+                middle_sections.append({
+                    "title": "Daily Ending Balance",
+                    "content": [{
+                        "type": "table",
+                        "data_key": "daily_balances",
+                        "headers": ["Date", "Amount"],
+                        "col_widths": [0.5, 0.5],
+                        "font": "Helvetica",
+                        "size": 10,
+                        "style": "none"
+                    }]
+                })
 
         # Render middle sections
         if layout_style == 'sequential':
             for section in middle_sections:
-                section_style = get_random_text_style(is_heading=True)
-                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, section_style["size"] + 4, section_style["font"], section_style["size"])
-                c.setFont(section_style["font"], section_style["size"])
-                c.setFillColor(section_style["color"])
+                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, header_style["size"] + 4, header_style["font"], header_style["size"])
+                c.setFont(header_style["font"], header_style["size"])
+                c.setFillColor(header_style["color"])
                 if section["title"] == "Account Summary":
                     col_widths = calculate_dynamic_col_widths(
                         section["content"][0].get("data", []), 
@@ -237,27 +283,26 @@ def create_dynamic_statement(ctx, output_buffer):
                         section["content"][0].get("col_widths", [0.75, 0.25])
                     )
                     table_width = sum(col_widths)
-                    box_height = (len(section["content"][0]["data"]) * (section["content"][0]["size"] + 4) + 20 + 12)
+                    box_height = (len(section["content"][0]["data"]) * (doc_style["size"] + 4) + 30 + 12)  # Increased height
                     c.setFillColor(colors.HexColor("#D3D3D3"))
                     c.setStrokeColor(colors.black)
-                    c.rect(margin - 8, y_position - 20 + 8 - 4.5 * (section["content"][0]["size"] + 4), table_width + 16, box_height, fill=1, stroke=1)
-                    c.setFillColor(section_style["color"])
+                    c.rect(margin - 8, y_position - 20 - 4.5 * (doc_style["size"] + 4), table_width + 16, box_height, fill=1, stroke=1)
+                    c.setFillColor(header_style["color"])
                     c.setStrokeColor(colors.black)
                     c.drawString(margin + 8, y_position, section["title"])
                 else:
                     c.drawString(margin + 8, y_position, section["title"])
-                y_position -= section_style["size"] + 4
+                y_position -= header_style["size"] + 4
 
                 for content in section["content"]:
-                    content_style = get_random_text_style(is_heading=False)
-                    c.setFont(content_style["font"], content_style["size"])
-                    c.setFillColor(content_style["color"])
+                    c.setFont(doc_style["font"], doc_style["size"])
+                    c.setFillColor(doc_style["color"])
                     if content["type"] == "text":
-                        lines = wrap_text(c, format_text(content["value"], ctx), content_style["font"], content_style["size"], usable_width)
-                        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, len(lines) * (content_style["size"] + 4), content_style["font"], content_style["size"])
+                        lines = wrap_text(c, format_text(content["value"], ctx), doc_style["font"], doc_style["size"], usable_width)
+                        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, len(lines) * (doc_style["size"] + 4), doc_style["font"], doc_style["size"])
                         for line in lines:
                             c.drawString(margin + 8, y_position, line)
-                            y_position -= content_style["size"] + 4
+                            y_position -= doc_style["size"] + 4
                     elif content["type"] == "table":
                         data = content.get("data", [])
                         if content.get("data_key") == "transactions":
@@ -276,20 +321,20 @@ def create_dynamic_statement(ctx, output_buffer):
                             st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Daily balances table data for {bank_name}: {len(data)} rows"]
                         elif content.get("data_key") == "transaction_and_interest_summary":
                             data = [
-                                ["Transaction Summary", ""],
-                                ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0")],
-                                ["Check-card POS transactions", ctx.get('summary', {}).get('pos_transactions', "0")],
-                                ["Check-card/virtual POS PIN txn", ctx.get('summary', {}).get('pos_pin_transactions', "0")],
-                                ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0")],
-                                ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0")],
-                                ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0")],
-                                ["", ""],
-                                ["Interest Summary", ""],
-                                ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%")],
-                                ["Days in period", ctx.get('summary', {}).get('days_in_period', "30")],
-                                ["Avg collected balance", ctx.get('summary', {}).get('average_collected_balance', "$0.00")],
-                                ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00")],
-                                ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00")]
+                                ["Transaction Summary", "", "", ""],
+                                ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0"), "", ""],
+                                ["Check-card POS transactions", ctx.get('summary', {}).get('pos_transactions', "0"), "", ""],
+                                ["Check-card/virtual POS PIN txn", ctx.get('summary', {}).get('pos_pin_transactions', "0"), "", ""],
+                                ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0"), "", ""],
+                                ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0"), "", ""],
+                                ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0"), "", ""],
+                                ["", "", "", ""],
+                                ["Interest Summary", "", "", ""],
+                                ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%"), "", ""],
+                                ["Days in period", ctx.get('summary', {}).get('days_in_period', "30"), "", ""],
+                                ["Avg collected balance", ctx.get('summary', {}).get('average_collected_balance', "$0.00"), "", ""],
+                                ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00"), "", ""],
+                                ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00"), "", ""]
                             ]
                         
                         if not data:
@@ -299,8 +344,8 @@ def create_dynamic_statement(ctx, output_buffer):
 
                         col_widths = calculate_dynamic_col_widths(data, usable_width, content.get("col_widths", [1/len(data[0])]*len(data[0])))
                         headers = content.get("headers", [])
-                        row_height = content_style["size"] + 4
-                        header_height = content_style["size"] + 4 if headers else 0
+                        row_height = doc_style["size"] + 4
+                        header_height = doc_style["size"] + 4 if headers else 0
 
                         if headers and y_position - (header_height + row_height) >= margin:
                             for i, header in enumerate(headers):
@@ -309,10 +354,10 @@ def create_dynamic_statement(ctx, output_buffer):
                                     c.drawRightString(x_pos + col_widths[i] - 8, y_position, header)
                                 else:
                                     c.drawString(x_pos + 8, y_position, header)
-                            y_position -= content_style["size"] + 4
+                            y_position -= doc_style["size"] + 4
                         
                         for row in data:
-                            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, row_height, content_style["font"], content_style["size"], 
+                            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, row_height, doc_style["font"], doc_style["size"], 
                                                          is_table=(section["title"] in ["Transaction History", "Daily Ending Balance"]), 
                                                          headers=headers, col_widths=col_widths)
                             for i, cell in enumerate(row):
@@ -326,34 +371,50 @@ def create_dynamic_statement(ctx, output_buffer):
                                     c.drawRightString(x_pos + col_widths[i] - 8, y_position, cell)
                                 else:
                                     c.drawString(x_pos + 8, y_position, cell)
-                            y_position -= content_style["size"] + 4
+                            y_position -= doc_style["size"] + 4
                         
                         if content.get("data_key") in ["transactions", "daily_balances", "transaction_and_interest_summary"] and data:
                             c.setStrokeColor(colors.black)
                             c.line(margin, y_position, margin + sum(col_widths), y_position)
                         y_position -= 12
-                    y_position -= 12
+                    y_position -= 12  # Line space between sections
         else:
             # Two-column layout
             col_width = usable_width / 2 - 10
-            for section in middle_sections:
-                section_style = get_random_text_style(is_heading=True)
-                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, section_style["size"] + 4, section_style["font"], section_style["size"])
-                c.setFont(section_style["font"], section_style["size"])
-                c.setFillColor(section_style["color"])
-                c.drawString(margin + 8, y_position, section["title"])
-                y_position -= section_style["size"] + 4
+            left_y_position = y_position
+            right_y_position = y_position
+            for i, section in enumerate(middle_sections):
+                col_x = margin if i % 2 == 0 else margin + col_width + 20
+                current_y_position = left_y_position if i % 2 == 0 else right_y_position
+                c.setFont(header_style["font"], header_style["size"])
+                c.setFillColor(header_style["color"])
+                if section["title"] == "Account Summary":
+                    col_widths = calculate_dynamic_col_widths(
+                        section["content"][0].get("data", []), 
+                        col_width, 
+                        section["content"][0].get("col_widths", [0.75, 0.25])
+                    )
+                    table_width = sum(col_widths)
+                    box_height = (len(section["content"][0]["data"]) * (doc_style["size"] + 4) + 30 + 12)
+                    c.setFillColor(colors.HexColor("#D3D3D3"))
+                    c.setStrokeColor(colors.black)
+                    c.rect(col_x - 8, current_y_position - 20 - 4.5 * (doc_style["size"] + 4), table_width + 16, box_height, fill=1, stroke=1)
+                    c.setFillColor(header_style["color"])
+                    c.setStrokeColor(colors.black)
+                    c.drawString(col_x + 8, current_y_position, section["title"])
+                else:
+                    c.drawString(col_x + 8, current_y_position, section["title"])
+                current_y_position -= header_style["size"] + 4
 
                 for content in section["content"]:
-                    content_style = get_random_text_style(is_heading=False)
-                    c.setFont(content_style["font"], content_style["size"])
-                    c.setFillColor(content_style["color"])
+                    c.setFont(doc_style["font"], doc_style["size"])
+                    c.setFillColor(doc_style["color"])
                     if content["type"] == "text":
-                        lines = wrap_text(c, format_text(content["value"], ctx), content_style["font"], content_style["size"], col_width)
-                        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, len(lines) * (content_style["size"] + 4), content_style["font"], content_style["size"])
+                        lines = wrap_text(c, format_text(content["value"], ctx), doc_style["font"], doc_style["size"], col_width)
+                        current_y_position = check_page_break(c, current_y_position, margin, PAGE_HEIGHT, len(lines) * (doc_style["size"] + 4), doc_style["font"], doc_style["size"])
                         for line in lines:
-                            c.drawString(margin + 8, y_position, line)
-                            y_position -= content_style["size"] + 4
+                            c.drawString(col_x + 8, current_y_position, line)
+                            current_y_position -= doc_style["size"] + 4
                     elif content["type"] == "table":
                         data = content.get("data", [])
                         if content.get("data_key") == "transactions":
@@ -368,22 +429,24 @@ def create_dynamic_statement(ctx, output_buffer):
                                 ])
                         elif content.get("data_key") == "daily_balances":
                             data = [[b.get("date", ""), b.get("amount", "")] for b in ctx.get("daily_balances", [])]
+                            print(f"Daily balances table data for {bank_name}: {len(data)} rows")
+                            st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Daily balances table data for {bank_name}: {len(data)} rows"]
                         elif content.get("data_key") == "transaction_and_interest_summary":
                             data = [
-                                ["Transaction Summary", ""],
-                                ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0")],
-                                ["Check-card POS transactions", ctx.get('summary', {}).get('pos_transactions', "0")],
-                                ["Check-card/virtual POS PIN txn", ctx.get('summary', {}).get('pos_pin_transactions', "0")],
-                                ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0")],
-                                ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0")],
-                                ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0")],
-                                ["", ""],
-                                ["Interest Summary", ""],
-                                ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%")],
-                                ["Days in period", ctx.get('summary', {}).get('days_in_period', "30")],
-                                ["Avg collected balance", ctx.get('summary', {}).get('average_collected_balance', "$0.00")],
-                                ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00")],
-                                ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00")]
+                                ["Transaction Summary", "", "", ""],
+                                ["Checks paid/written", ctx.get('summary', {}).get('checks_written', "0"), "", ""],
+                                ["Check-card POS transactions", ctx.get('summary', {}).get('pos_transactions', "0"), "", ""],
+                                ["Check-card/virtual POS PIN txn", ctx.get('summary', {}).get('pos_pin_transactions', "0"), "", ""],
+                                ["Total ATM transactions", ctx.get('summary', {}).get('total_atm_transactions', "0"), "", ""],
+                                ["PNC Bank ATM transactions", ctx.get('summary', {}).get('pnc_atm_transactions', "0"), "", ""],
+                                ["Other Bank ATM transactions", ctx.get('summary', {}).get('other_atm_transactions', "0"), "", ""],
+                                ["", "", "", ""],
+                                ["Interest Summary", "", "", ""],
+                                ["APY earned", ctx.get('summary', {}).get('apy_earned', "0.00%"), "", ""],
+                                ["Days in period", ctx.get('summary', {}).get('days_in_period', "30"), "", ""],
+                                ["Avg collected balance", ctx.get('summary', {}).get('average_collected_balance', "$0.00"), "", ""],
+                                ["Interest paid this period", ctx.get('summary', {}).get('interest_paid_period', "$0.00"), "", ""],
+                                ["YTD interest paid", ctx.get('summary', {}).get('interest_paid_ytd', "$0.00"), "", ""]
                             ]
                         
                         if not data:
@@ -393,47 +456,52 @@ def create_dynamic_statement(ctx, output_buffer):
 
                         col_widths = calculate_dynamic_col_widths(data, col_width, content.get("col_widths", [1/len(data[0])]*len(data[0])))
                         headers = content.get("headers", [])
-                        row_height = content_style["size"] + 4
-                        header_height = content_style["size"] + 4 if headers else 0
+                        row_height = doc_style["size"] + 4
+                        header_height = doc_style["size"] + 4 if headers else 0
                         
-                        if headers and y_position - (header_height + row_height) >= margin:
+                        if headers and current_y_position - (header_height + row_height) >= margin:
                             for i, header in enumerate(headers):
-                                x_pos = margin + sum(col_widths[:i])
+                                x_pos = col_x + sum(col_widths[:i])
                                 if i in [2, 3] and section["title"] in ["Transaction History", "Daily Ending Balance"]:
-                                    c.drawRightString(x_pos + col_widths[i] - 8, y_position, header)
+                                    c.drawRightString(x_pos + col_widths[i] - 8, current_y_position, header)
                                 else:
-                                    c.drawString(x_pos + 8, y_position, header)
-                            y_position -= content_style["size"] + 4
+                                    c.drawString(x_pos + 8, current_y_position, header)
+                            current_y_position -= doc_style["size"] + 4
                         
                         for row in data:
-                            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, row_height, content_style["font"], content_style["size"], 
-                                                         is_table=True, headers=headers, col_widths=col_widths)
+                            current_y_position = check_page_break(c, current_y_position, margin, PAGE_HEIGHT, row_height, doc_style["font"], doc_style["size"], 
+                                                                 is_table=True, headers=headers, col_widths=col_widths)
                             for i, cell in enumerate(row):
-                                x_pos = margin + sum(col_widths[:i])
+                                x_pos = col_x + sum(col_widths[:i])
                                 cell = format_text(str(cell), ctx)
                                 if isinstance(cell, str) and len(cell) > 50:
                                     cell = cell[:47] + "..."
                                 if section["title"] == "Account Summary" and i == 1:
-                                    c.drawCentredString(x_pos + col_widths[i] / 2, y_position, cell)
+                                    c.drawCentredString(x_pos + col_widths[i] / 2, current_y_position, cell)
                                 elif section["title"] in ["Transaction History", "Daily Ending Balance"] and i in [2, 3]:
-                                    c.drawRightString(x_pos + col_widths[i] - 8, y_position, cell)
+                                    c.drawRightString(x_pos + col_widths[i] - 8, current_y_position, cell)
                                 else:
-                                    c.drawString(x_pos + 8, y_position, cell)
-                            y_position -= content_style["size"] + 4
+                                    c.drawString(x_pos + 8, current_y_position, cell)
+                            current_y_position -= doc_style["size"] + 4
                         
                         if content.get("data_key") in ["transactions", "daily_balances", "transaction_and_interest_summary"] and data:
                             c.setStrokeColor(colors.black)
-                            c.line(margin, y_position, margin + sum(col_widths), y_position)
-                        y_position -= 12
-                    y_position -= 12
+                            c.line(col_x, current_y_position, col_x + sum(col_widths), current_y_position)
+                        current_y_position -= 12
+                    current_y_position -= 12  # Line space between sections
+                
+                if i % 2 == 0:
+                    left_y_position = current_y_position
+                else:
+                    right_y_position = current_y_position
+                y_position = min(left_y_position, right_y_position)
 
         # Render Footer
-        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 60, "Helvetica", 8)
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 60, doc_style["font"], doc_style["size"])
         c.setStrokeColor(colors.black)
         c.line(margin, y_position + 20, margin + usable_width, y_position + 20)
-        footer_style = get_random_text_style(is_heading=False)
-        c.setFont(footer_style["font"], footer_style["size"])
-        c.setFillColor(footer_style["color"])
+        c.setFont(doc_style["font"], doc_style["size"])
+        c.setFillColor(doc_style["color"])
         lines = wrap_text(
             c,
             format_text(
@@ -443,14 +511,14 @@ def create_dynamic_statement(ctx, output_buffer):
                 f"© 2025 {bank_name} Bank, N.A. All rights reserved. Member FDIC.",
                 ctx
             ),
-            footer_style["font"],
-            footer_style["size"],
+            doc_style["font"],
+            doc_style["size"],
             usable_width
         )
         for line in lines:
-            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, footer_style["size"] + 2, footer_style["font"], footer_style["size"])
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, doc_style["size"] + 2, doc_style["font"], doc_style["size"])
             c.drawString(margin + 8, y_position, line)
-            y_position -= footer_style["size"] + 2
+            y_position -= doc_style["size"] + 2
         y_position -= 12
 
         c.save()

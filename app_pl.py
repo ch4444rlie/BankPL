@@ -10,7 +10,7 @@ from dynamic import create_dynamic_statement
 BANK_NAMES = ["Chase", "Wells Fargo", "PNC", "Citibank"]
 
 # Streamlit app configuration
-st.set_page_config(page_title="Lightweight Bank Statement Generator", page_icon="🏦", layout="wide")
+st.set_page_config(page_title="Dynamic Bank Statement Generator", page_icon="🏦", layout="wide")
 
 # Custom CSS for buttons (match slider width, professional look)
 st.markdown("""
@@ -85,10 +85,11 @@ with st.sidebar:
             st.session_state['trigger_generate'] = True
 
 # Main app logic
-st.title("Lightweight Synthetic Bank Statement Generator")
+st.title("Dynamic Synthetic Bank Statement Generator")
 st.markdown("""  
 - Create your synthetic bank statement with the sidebar options.  
-- Select a **Bank**, **Personal** or **Business** account type, and number of transactions.  
+- Customize the output by selecting a **Bank**, **Account Type**, and **Number of Transactions**.  
+- Clicking generate will produce a unique statement each time
 - Download the generated PDF!
 """)
 
