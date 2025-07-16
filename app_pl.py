@@ -86,9 +86,8 @@ with st.sidebar:
 
 # Main app logic
 st.title("Dynamic Synthetic Bank Statement Generator")
-st.markdown("""  
-- Create your synthetic bank statement with the sidebar options.  
-- Customize the output by selecting a **Bank**, **Account Type**, and **Number of Transactions**.  
+st.markdown("""   
+- Customize the your synthetic bank statement by selecting a **Bank**, **Account Type**, and **Number of Transactions**.  
 - Clicking generate will produce a unique statement each time
 - Download the generated PDF!
 """)
@@ -105,7 +104,7 @@ if st.session_state['trigger_generate']:
     else:
         with st.spinner(f"Generating {selected_bank} {account_type} statement..."):
             try:
-                ctx = generate_statement_data(selected_bank, account_type=account_type)
+                ctx = generate_statement_data(selected_bank, account_type=account_type, num_transactions=num_transactions)
                 # Slice transactions to user-specified number
                 ctx['transactions'] = ctx['transactions'][:num_transactions]
                 ctx['deposits'] = [t for t in ctx['transactions'] if t['credit']]
@@ -145,7 +144,7 @@ if st.session_state['statement_data'] and st.session_state['pdf_buffer']:
     with st.expander("View Details"):
         st.json(st.session_state['statement_data'])
 
-    st.subheader(f"Preview: {selected_bank} {account_type.capitalize()} Statement")
+    st.subheader(f"Preview: {selected_bank or 'No Bank Selected'} {account_type.capitalize()} Statement")
     pdf_buffer = st.session_state['pdf_buffer']
     pdf_buffer.seek(0)
     pdf_content = pdf_buffer.read()

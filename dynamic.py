@@ -50,7 +50,18 @@ def create_dynamic_statement(ctx, output_buffer):
             'beginning_balance': f"{currency}{beginning_balance:,.2f}",
             'deposits_total': f"{currency}{deposits_total:,.2f}",
             'withdrawals_total': f"{currency}{withdrawals_total:,.2f}",
-            'ending_balance': f"{currency}{ending_balance:,.2f}"
+            'ending_balance': f"{currency}{ending_balance:,.2f}",
+            'checks_written': ctx['summary'].get('checks_written', '0'),
+            'pos_transactions': ctx['summary'].get('pos_transactions', '0'),
+            'pos_pin_transactions': ctx['summary'].get('pos_pin_transactions', '0'),
+            'total_atm_transactions': ctx['summary'].get('total_atm_transactions', '0'),
+            'pnc_atm_transactions': ctx['summary'].get('pnc_atm_transactions', '0'),
+            'other_atm_transactions': ctx['summary'].get('other_atm_transactions', '0'),
+            'apy_earned': ctx['summary'].get('apy_earned', '0.00%'),
+            'days_in_period': ctx['summary'].get('days_in_period', '30'),
+            'average_collected_balance': ctx['summary'].get('average_collected_balance', f"{currency}0.00"),
+            'interest_paid_period': ctx['summary'].get('interest_paid_period', f"{currency}0.00"),
+            'interest_paid_ytd': ctx['summary'].get('interest_paid_ytd', f"{currency}0.00")
         }
 
         # Validate transaction data
@@ -118,7 +129,7 @@ def create_dynamic_statement(ctx, output_buffer):
             y_position -= 20
 
         # Add half a line space after logo
-        y_position -= (doc_style["size"] + 4) / 2
+        y_position -= (doc_style["size"] + 12) / 2
 
         # Determine bank and customer address positions
         bank_x_position = margin
@@ -200,9 +211,9 @@ def create_dynamic_statement(ctx, output_buffer):
                     left_y_position = y_position
                     right_y_position = y_position
 
-            # Calculate height for Customer Service section box
+            # Calculate height for Customer Service or Account Summary section box
             box_height = 0
-            if section["title"] == "Customer Service":
+            if section["title"] in ["Customer Service", "Account Summary"]:
                 box_height += header_style["size"] + 4  # Title height
                 for content in section["content"]:
                     if content["type"] == "text":
@@ -210,18 +221,35 @@ def create_dynamic_statement(ctx, output_buffer):
                         box_height += len(lines) * (doc_style["size"] + 4)
                     elif content["type"] == "table":
                         data = content.get("data", [])
-                        col_widths = content.get("col_widths", [1/max(1, len(data[0]))]*len(data[0]))
-                        if layout_style == 'two-column' and section["title"] in ["Customer Service", "Account Summary", "Daily Ending Balance"]:
-                            col_widths = [0.375, 0.625]
-                        col_widths = [column_width * w for w in col_widths]
                         box_height += len(data) * (doc_style["size"] + 4) + 12  # Table rows + spacing
                 box_height += 8  # Padding around content
-                # Draw colored box for Customer Service
+
+            # Draw colored box for Customer Service
+            if section["title"] == "Customer Service":
                 c.setFillColor(colors.lightblue if bank_name in ["Chase", "Citibank"] else 
                               colors.lightcoral if bank_name == "Wells Fargo" else 
                               colors.lightsalmon)
-                c.rect(x_position - 4, y_position - box_height + 6 + 21, sum(col_widths) + 8, box_height - 12, fill=1)
+                col_widths = [column_width * w for w in [0.375, 0.625]] if layout_style == 'two-column' else [column_width * w for w in [0.375, 0.125]]
+                c.rect(x_position - 4, y_position - box_height + 24, sum(col_widths) + 8, box_height - 6, fill=1)
                 c.setFillColor(header_style["color"])
+
+            # Randomly choose decoration for Account Summary (box, colored box, or gridline)
+            account_summary_decoration = None
+            if section["title"] == "Account Summary":
+                account_summary_decoration = random.choice(["box", "colored_box", "gridline"])
+
+            # Draw box or colored box for Account Summary
+            if section["title"] == "Account Summary" and account_summary_decoration in ["box", "colored_box"]:
+                col_widths = [column_width * w for w in [0.375, 0.625]] if layout_style == 'two-column' else [column_width * w for w in [0.375, 0.125]]
+                if account_summary_decoration == "colored_box":
+                    c.setFillColor(colors.lightblue if bank_name in ["Chase", "Citibank"] else 
+                                  colors.lightcoral if bank_name == "Wells Fargo" else 
+                                  colors.lightsalmon)
+                    c.rect(x_position - 4, y_position - box_height - 30, sum(col_widths) + 8, box_height + 48, fill=1)
+                    c.setFillColor(header_style["color"])
+                else:  # box
+                    c.setStrokeColor(colors.black)
+                    c.rect(x_position - 4, y_position - box_height - 30, sum(col_widths) + 8, box_height + 48, fill=0)
 
             # Render section title
             c.setFont(header_style["font"], header_style["size"])
@@ -264,7 +292,7 @@ def create_dynamic_statement(ctx, output_buffer):
                         data = [
                             [
                                 t.get("date", ""),
-                                t.get("description", ""),
+                                t.get("description", "")[:20] + "..." if layout_style == "two-column" and len(t.get("description", "")) > 20 else t.get("description", ""),
                                 t.get("deposits_credits", "") or f"-{t.get('withdrawals_debits', '')}",
                                 t.get("balance", "")
                             ] for t in ctx.get("transactions", [])
@@ -312,7 +340,7 @@ def create_dynamic_statement(ctx, output_buffer):
                         # Draw gray box for Transaction History headers
                         if content.get("data_key") == "transactions":
                             c.setFillColor(colors.lightgrey)
-                            c.rect(x_position - 2, y_position - header_style["size"] + (doc_style["size"] + 5) / 2, sum(col_widths) + 4, header_style["size"] + 4, fill=1)
+                            c.rect(x_position - 2, y_position - header_style["size"] + (doc_style["size"] + 5) / 2, sum(col_widths) + 4, header_style["size"] + 5, fill=1)
                             c.setFillColor(header_style["color"])
                         c.setFont(header_style["font"], header_style["size"])
                         for i, header in enumerate(headers):
@@ -328,7 +356,8 @@ def create_dynamic_statement(ctx, output_buffer):
 
                     c.setFont(doc_style["font"], doc_style["size"])
                     c.setFillColor(doc_style["color"])
-                    for row in data:
+                    row_y_positions = []  # For gridlines in Account Summary
+                    for row_idx, row in enumerate(data):
                         if y_position - 10 < margin:
                             c.showPage()
                             y_position = PAGE_HEIGHT - margin
@@ -341,6 +370,7 @@ def create_dynamic_statement(ctx, output_buffer):
                                 left_y_position = y_position
                                 right_y_position = y_position
                             c.setFont(doc_style["font"], doc_style["size"])
+                        row_y_positions.append(y_position)
                         for i, cell in enumerate(row):
                             if i < len(col_widths):
                                 x_pos = x_position + sum(col_widths[:i])
@@ -355,10 +385,20 @@ def create_dynamic_statement(ctx, output_buffer):
                                     c.drawString(x_pos, y_position, cell)
                         y_position -= doc_style["size"] + 4
                     y_position -= 12
+
+                    # Draw gridlines for Account Summary
+                    if section["title"] == "Account Summary" and account_summary_decoration == "gridline":
+                        c.setStrokeColor(colors.black)
+                        # Horizontal lines (between rows and at top/bottom, moved down by 0.25 line space)
+                        for y in row_y_positions + [row_y_positions[0] + doc_style["size"] + 4]:
+                            c.line(x_position, y - 3.5, x_position + sum(col_widths), y - 3.5)
+                        # Vertical line (centered)
+                        c.line(x_position + sum(col_widths) / 2, row_y_positions[-1] - 3.5, x_position + sum(col_widths) / 2, row_y_positions[0] + doc_style["size"] + 4 - 3.5)
+
                     # Draw horizontal divider line after Transaction History table
                     if content.get("data_key") == "transactions":
                         c.setStrokeColor(colors.black)
-                        c.line(x_position, y_position + 12, x_position + sum(col_widths), y_position + 12)
+                        c.line(x_position, y_position + 16, x_position + sum(col_widths), y_position + 16)
 
             # Add extra blank line space after Important Account Information
             y_position -= 12

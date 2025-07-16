@@ -152,7 +152,7 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             transactions.append(transaction)
 
         # Sort transactions by date
-        transactions.sort(key=lambda x: datetime.strptime(x["date"], '%m/%d'))
+        transactions.sort(key=lambda x: datetime.strptime(x['date'], '%m/%d'))
 
         # Recalculate balance in chronological order
         running_balance = beginning_balance
@@ -247,6 +247,9 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                     "value": (
                         "Effective 1 July 2025, the monthly service fee for {account_type} accounts will increase to £12 unless you maintain a minimum daily balance of £1,200, have £400 in qualifying direct debits, or maintain a linked savings account with a balance of £4,000 or more. "
                         "For questions, visit {website} or call {contact}."
+                    ) if bank_name == "Citibank" else (
+                        "Effective July 1, 2025, the monthly service fee for {account_type} accounts will increase to $15 unless you maintain a minimum daily balance of $1,500, have $500 in qualifying direct deposits, or maintain a linked savings account with a balance of $5,000 or more. "
+                        "For questions, visit {website} or call {contact}."
                     ),
                     "font": "Helvetica",
                     "size": 10,
@@ -265,13 +268,13 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                     "style": "none"
                 }]
             },
-             {
+            {
                 "title": "Customer Service",
                 "content": [{
                     "type": "table",
                     "data": [
                         ["Website:", bank_name.lower() + ".co.uk" if bank_name == "Citibank" else bank_name.lower() + ".com"],
-                        ["Phone:", config["contact"] if bank_name != "Citibank" else f"+44 355 390713"],
+                        ["Phone:", config["contact"] if bank_name != "Citibank" else f"0800 005 555"],
                         ["Español:", f"1-800-{random.randint(100, 999)}-{random.randint(1000, 9999)}"],
                         ["International:", f"1-800-{random.randint(100, 999)}-{random.randint(1000, 9999)}"]
                     ],
@@ -306,22 +309,8 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                 "title": "Transaction and Interest Summary",
                 "content": [{
                     "type": "table",
-                    "data": [
-                        ["Transaction Summary", "", "", ""],
-                        ["Checks paid/written", summary.get("checks_written", "0"), "", ""],
-                        ["Check-card POS transactions", summary.get("pos_transactions", "0"), "", ""],
-                        ["Check-card/virtual POS PIN txn", summary.get("pos_pin_transactions", "0"), "", ""],
-                        ["Total ATM transactions", summary.get("total_atm_transactions", "0"), "", ""],
-                        ["PNC Bank ATM transactions", summary.get("pnc_atm_transactions", "0"), "", ""],
-                        ["Other Bank ATM transactions", summary.get("other_atm_transactions", "0"), "", ""],
-                        ["", "", "", ""],
-                        ["Interest Summary", "", "", ""],
-                        ["APY earned", summary.get("apy_earned", "0.00%"), "", ""],
-                        ["Days in period", summary.get("days_in_period", "30"), "", ""],
-                        ["Avg collected balance", summary.get("average_collected_balance", "$0.00"), "", ""],
-                        ["Interest paid this period", summary.get("interest_paid_period", "$0.00"), "", ""],
-                        ["YTD interest paid", summary.get("interest_paid_ytd", "$0.00"), "", ""]
-                    ],
+                    "data_key": "transaction_and_interest_summary",
+                    "headers": [],
                     "col_widths": [0.375, 0.125, 0.375, 0.125],
                     "font": "Helvetica",
                     "size": 10,
@@ -371,7 +360,7 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             "account_holder": account_holder,
             "account_holder_address": account_holder_address,
             "bank_address_lines": config["address_lines"],
-            "customer_account_number": account_number,  # Fix: Use account_number
+            "customer_account_number": account_number,
             "account_type": account_type_name,
             "statement_period": statement_period,
             "statement_date": statement_date,
@@ -394,19 +383,13 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             "sections": sections
         }
 
-        # Add Account Summary section after ctx is defined
+        # Add Account Summary section
         sections.append({
             "title": "Account Summary",
             "content": [{
                 "type": "table",
                 "data_key": "account_summary",
-                "data": [
-                    ["Beginning Balance", ctx.get('summary', {}).get('beginning_balance', "$0.00")],
-                    ["Deposits or Credits", ctx.get('summary', {}).get('deposits_total', "$0.00")],
-                    ["Withdrawals or Debits", ctx.get('summary', {}).get('withdrawals_total', "$0.00")],
-                    ["Ending Balance", ctx.get('summary', {}).get('ending_balance', "$0.00")]
-                ],
-                "headers": [],  # No headers
+                "headers": [],
                 "col_widths": [0.375, 0.125],
                 "font": "Helvetica",
                 "size": 10,
