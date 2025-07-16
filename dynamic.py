@@ -133,16 +133,16 @@ def create_dynamic_statement(ctx, output_buffer):
 
         # Determine bank and customer address positions
         bank_x_position = margin
-        customer_x_position = PAGE_WIDTH - margin - 2 * inch  # Approximate width for customer address
+        customer_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
         if logo_position == 'right':
-            bank_x_position = PAGE_WIDTH - margin - 2 * inch
+            bank_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
             customer_x_position = margin
         elif logo_position == 'center':
             if random.randint(0, 1) == 0:
                 bank_x_position = margin
-                customer_x_position = PAGE_WIDTH - margin - 2 * inch
+                customer_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
             else:
-                bank_x_position = PAGE_WIDTH - margin - 2 * inch
+                bank_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
                 customer_x_position = margin
 
         # Render bank and customer addresses on the same horizontal axis
@@ -162,10 +162,16 @@ def create_dynamic_statement(ctx, output_buffer):
                 c.setFont(doc_style["font"], doc_style["size"])
             # Render bank address line
             bank_line = ctx.get('bank_address_lines', [''] * 3)[i]
-            c.drawString(bank_x_position, y_position, format_text(bank_line, ctx))
+            if bank_x_position > PAGE_WIDTH / 2:  # Right side
+                c.drawRightString(bank_x_position, y_position, format_text(bank_line, ctx))
+            else:  # Left side
+                c.drawString(bank_x_position, y_position, format_text(bank_line, ctx))
             # Render customer address line
             customer_line = customer_address_lines[i] if i < len(customer_address_lines) else ""
-            c.drawString(customer_x_position, y_position, customer_line)
+            if customer_x_position > PAGE_WIDTH / 2:  # Right side
+                c.drawRightString(customer_x_position, y_position, customer_line)
+            else:  # Left side
+                c.drawString(customer_x_position, y_position, customer_line)
             y_position -= doc_style["size"] + 4
 
         # Add two empty lines after addresses
