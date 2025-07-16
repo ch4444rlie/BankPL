@@ -22,11 +22,16 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
         fake = Faker()
         Faker.seed(random.randint(0, 1000000))
 
-        # Bank-specific configurations
+        # Bank-specific configurations with preprocessed address lines
         bank_configs = {
             "Chase": {
                 "full_name": "JPMorgan Chase Bank, N.A.",
                 "address": "PO Box 659754, San Antonio, TX 78265-9754",
+                "address_lines": [
+                    "JPMorgan Chase Bank, N.A. Mail Code TX78265",
+                    "PO Box 659754",
+                    "San Antonio, TX 78265-9754"
+                ],
                 "logo_path": "sample_logos/chase_bank_logo.png",
                 "contact": "1-800-242-7338",
                 "website": "chase.com",
@@ -35,6 +40,11 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             "Wells Fargo": {
                 "full_name": "Wells Fargo Bank, N.A.",
                 "address": "420 Montgomery Street, San Francisco, CA 94104",
+                "address_lines": [
+                    "Wells Fargo Bank, N.A. Mail Code CA94104",
+                    "420 Montgomery Street",
+                    "San Francisco, CA 94104"
+                ],
                 "logo_path": "sample_logos/wellsfargo_logo.png",
                 "contact": "1-800-225-5935",
                 "website": "wellsfargo.com",
@@ -43,6 +53,11 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             "PNC": {
                 "full_name": "PNC Bank, National Association",
                 "address": "249 Fifth Avenue, Pittsburgh, PA 15222",
+                "address_lines": [
+                    "PNC Bank, National Association Mail Code PA15222",
+                    "249 Fifth Avenue",
+                    "Pittsburgh, PA 15222"
+                ],
                 "logo_path": "sample_logos/pnc_logo.png",
                 "contact": "1-888-PNC-BANK",
                 "website": "pnc.com",
@@ -50,10 +65,15 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             },
             "Citibank": {
                 "full_name": "Citibank, N.A.",
-                "address": "388 Greenwich Street, New York, NY 10013",
+                "address": "Citigroup Centre, Canada Square, Canary Wharf, London, E14 5LB",
+                "address_lines": [
+                    "Citibank, N.A. Mail Code E145LB",
+                    "Citigroup Centre, Canada Square",
+                    "Canary Wharf, London, E14 5LB"
+                ],
                 "logo_path": "sample_logos/citibank_logo.png",
-                "contact": "1-800-374-9700",
-                "website": "citibank.com",
+                "contact": "0800 005 555",
+                "website": "citibank.co.uk",
                 "currency": "£"
             }
         }
@@ -79,7 +99,7 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
         statement_period = f"{start_date.strftime('%B %d, %Y')} - {end_date.strftime('%B %d, %Y')}"
         statement_date = end_date.strftime('%B %d, %Y')
 
-        # Generate transactions with realistic descriptions
+        # Generate transactions
         transactions = []
         balance = round(random.uniform(1000, 10000), 2)
         beginning_balance = balance
@@ -87,7 +107,6 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
         withdrawals_count = 0
         deposits_total = 0.0
         withdrawals_total = 0.0
-        daily_balances = []
 
         deposit_descriptions = [
             "Direct Deposit", "ATM Deposit", "Mobile Deposit", "Payroll Credit",
@@ -113,14 +132,12 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                 description = random.choice(deposit_descriptions)
                 credit = f"{config['currency']}{amount:.2f}"
                 debit = ""
-                balance += amount
                 deposits_count += 1
                 deposits_total += amount
             else:
                 description = random.choice(withdrawal_descriptions)
                 credit = ""
                 debit = f"{config['currency']}{amount:.2f}"
-                balance -= amount
                 withdrawals_count += 1
                 withdrawals_total += amount
             
@@ -129,15 +146,25 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                 "description": description,
                 "credit": credit,
                 "debit": debit,
-                "balance": f"{config['currency']}{balance:.2f}",
                 "deposits_credits": credit,
-                "withdrawals_debits": debit,
-                "ending_balance": f"{config['currency']}{balance:.2f}"
+                "withdrawals_debits": debit
             }
             transactions.append(transaction)
 
         # Sort transactions by date
         transactions.sort(key=lambda x: datetime.strptime(x["date"], '%m/%d'))
+
+        # Recalculate balance in chronological order
+        running_balance = beginning_balance
+        for transaction in transactions:
+            if transaction["credit"]:
+                amount = float(transaction["credit"].replace(config["currency"], ""))
+                running_balance += amount
+            if transaction["debit"]:
+                amount = float(transaction["debit"].replace(config["currency"], ""))
+                running_balance -= amount
+            transaction["balance"] = f"{config['currency']}{running_balance:.2f}"
+            transaction["ending_balance"] = f"{config['currency']}{running_balance:.2f}"
 
         # Validate deposits and withdrawals
         deposits = [t for t in transactions if t['credit']]
@@ -159,14 +186,14 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                 "amount": f"{config['currency']}{current_balance:.2f}"
             })
 
-        # Define summary for use in sections
+        # Define summary
         summary = {
             "beginning_balance": f"{config['currency']}{beginning_balance:.2f}",
             "deposits_count": str(deposits_count),
             "deposits_total": f"{config['currency']}{deposits_total:.2f}",
             "withdrawals_count": str(withdrawals_count),
             "withdrawals_total": f"{config['currency']}{withdrawals_total:.2f}",
-            "ending_balance": f"{config['currency']}{balance:.2f}",
+            "ending_balance": f"{config['currency']}{running_balance:.2f}",
             "transactions_count": str(len(transactions)),
             "overdraft_protection1": "None",
             "overdraft_status": "opted out",
@@ -188,11 +215,37 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
         # Define bank-specific sections
         sections = [
             {
+                "title": "Bank Address",
+                "content": [
+                    {
+                        "type": "text",
+                        "value": config['address_lines'][0],
+                        "font": "Helvetica",
+                        "size": 10,
+                        "wrap": True
+                    },
+                    {
+                        "type": "text",
+                        "value": config['address_lines'][1],
+                        "font": "Helvetica",
+                        "size": 10,
+                        "wrap": True
+                    },
+                    {
+                        "type": "text",
+                        "value": config['address_lines'][2],
+                        "font": "Helvetica",
+                        "size": 10,
+                        "wrap": True
+                    }
+                ]
+            },
+            {
                 "title": "Important Account Information",
                 "content": [{
                     "type": "text",
                     "value": (
-                        "Effective July 1, 2025, the monthly service fee for {account_type} accounts will increase to $15 unless you maintain a minimum daily balance of $1,500, have $500 in qualifying direct deposits, or maintain a linked savings account with a balance of $5,000 or more. "
+                        "Effective 1 July 2025, the monthly service fee for {account_type} accounts will increase to £12 unless you maintain a minimum daily balance of £1,200, have £400 in qualifying direct debits, or maintain a linked savings account with a balance of £4,000 or more. "
                         "For questions, visit {website} or call {contact}."
                     ),
                     "font": "Helvetica",
@@ -201,28 +254,29 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                 }]
             },
             {
-                "title": "Account Summary",
-                "content": [{
-                    "type": "table",
-                    "data": [
-                        ["Beginning Balance", summary["beginning_balance"]],
-                        ["Deposits and Credits", summary["deposits_total"]],
-                        ["Withdrawals and Debits", summary["withdrawals_total"]],
-                        ["Ending Balance", summary["ending_balance"]]
-                    ],
-                    "col_widths": [0.75, 0.25],
-                    "font": "Helvetica",
-                    "size": 10,
-                    "style": "none"
-                }]
-            },
-            {
                 "title": "Transaction History",
                 "content": [{
                     "type": "table",
                     "data_key": "transactions",
                     "headers": ["Date", "Description", "Amount", "Balance"],
-                    "col_widths": [0.15, 0.45, 0.20, 0.20],
+                    "col_widths": [0.125, 0.375, 0.25, 0.25],
+                    "font": "Helvetica",
+                    "size": 10,
+                    "style": "none"
+                }]
+            },
+             {
+                "title": "Customer Service",
+                "content": [{
+                    "type": "table",
+                    "data": [
+                        ["Website:", bank_name.lower() + ".co.uk" if bank_name == "Citibank" else bank_name.lower() + ".com"],
+                        ["Phone:", config["contact"] if bank_name != "Citibank" else f"+44 355 390713"],
+                        ["Español:", f"1-800-{random.randint(100, 999)}-{random.randint(1000, 9999)}"],
+                        ["International:", f"1-800-{random.randint(100, 999)}-{random.randint(1000, 9999)}"]
+                    ],
+                    "headers": [],  # No headers
+                    "col_widths": [0.375, 0.125],
                     "font": "Helvetica",
                     "size": 10,
                     "style": "none"
@@ -280,16 +334,35 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
                 "content": [{
                     "type": "table",
                     "data_key": "daily_balances",
-                    "headers": ["Date", "Amount"],
-                    "col_widths": [0.5, 0.5],
+                    "headers": [],  # No headers
+                    "col_widths": [0.375, 0.125],
                     "font": "Helvetica",
                     "size": 10,
                     "style": "none"
                 }]
             })
 
-        # Randomize section order
-        random.shuffle(sections)
+        # Randomize section order, ensuring Chase's Daily Ending Balance is second-to-last
+        # Ensure Customer Service is in the first two sections
+        customer_service_section = [s for s in sections if s["title"] == "Customer Service"]
+        other_sections = [s for s in sections if s["title"] != "Customer Service"]
+        if customer_service_section:
+            # Randomly place Customer Service as first or second
+            first_two = [customer_service_section[0]] if random.randint(0, 1) == 0 else []
+            remaining_sections = other_sections
+            if first_two:
+                sections = first_two + remaining_sections
+            else:
+                # Place Customer Service second by shuffling remaining and inserting
+                random.shuffle(remaining_sections)
+                sections = remaining_sections[:1] + customer_service_section + remaining_sections[1:]
+        
+        # For Chase, ensure Daily Ending Balance is second-to-last
+        if bank_name.lower() == 'chase':
+            daily_balance = [s for s in sections if s["title"] == "Daily Ending Balance"]
+            other_sections = [s for s in sections if s["title"] != "Daily Ending Balance"]
+            random.shuffle(other_sections)
+            sections = other_sections + daily_balance
 
         # Context dictionary
         ctx = {
@@ -297,7 +370,8 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             "customer_bank_name": config["full_name"],
             "account_holder": account_holder,
             "account_holder_address": account_holder_address,
-            "customer_account_number": account_number,
+            "bank_address_lines": config["address_lines"],
+            "customer_account_number": account_number,  # Fix: Use account_number
             "account_type": account_type_name,
             "statement_period": statement_period,
             "statement_date": statement_date,
@@ -316,8 +390,41 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             "date_of_birth": fake.date_of_birth(minimum_age=18, maximum_age=80).strftime('%m/%d/%Y') if bank_name == "Citibank" else "",
             "total_pages": 1,
             "layout_style": "sequential" if random.randint(0, 1) == 0 else "two-column",
+            "logo_position": random.choice(["left", "right", "center"]),
             "sections": sections
         }
+
+        # Add Account Summary section after ctx is defined
+        sections.append({
+            "title": "Account Summary",
+            "content": [{
+                "type": "table",
+                "data_key": "account_summary",
+                "data": [
+                    ["Beginning Balance", ctx.get('summary', {}).get('beginning_balance', "$0.00")],
+                    ["Deposits or Credits", ctx.get('summary', {}).get('deposits_total', "$0.00")],
+                    ["Withdrawals or Debits", ctx.get('summary', {}).get('withdrawals_total', "$0.00")],
+                    ["Ending Balance", ctx.get('summary', {}).get('ending_balance', "$0.00")]
+                ],
+                "headers": [],  # No headers
+                "col_widths": [0.375, 0.125],
+                "font": "Helvetica",
+                "size": 10,
+                "style": "none"
+            }]
+        })
+
+        # Re-randomize section order to include Account Summary, ensuring Chase's Daily Ending Balance is second-to-last
+        if bank_name.lower() == 'chase':
+            daily_balance = [s for s in sections if s["title"] == "Daily Ending Balance"]
+            other_sections = [s for s in sections if s["title"] != "Daily Ending Balance"]
+            random.shuffle(other_sections)
+            sections = other_sections + daily_balance
+        else:
+            random.shuffle(sections)
+
+        # Update ctx with the new sections
+        ctx["sections"] = sections
 
         return ctx
 
