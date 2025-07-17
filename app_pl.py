@@ -5,6 +5,7 @@ from io import BytesIO
 from streamlit_pdf_viewer import pdf_viewer
 from randomize import generate_statement_data
 from dynamic import create_dynamic_statement
+from dynamic import generate_pdf_statement
 
 # Bank names
 BANK_NAMES = ["Chase", "Wells Fargo", "PNC", "Citibank"]
@@ -105,7 +106,6 @@ if st.session_state['trigger_generate']:
         with st.spinner(f"Generating {selected_bank} {account_type} statement..."):
             try:
                 ctx = generate_statement_data(selected_bank, account_type=account_type, num_transactions=num_transactions)
-                # Slice transactions to user-specified number
                 ctx['transactions'] = ctx['transactions'][:num_transactions]
                 ctx['deposits'] = [t for t in ctx['transactions'] if t['credit']]
                 ctx['withdrawals'] = [t for t in ctx['transactions'] if t['debit']]
@@ -114,14 +114,14 @@ if st.session_state['trigger_generate']:
                 ctx['summary']['transactions_count'] = str(len(ctx['transactions']))
                 
                 pdf_buffer = BytesIO()
-                create_dynamic_statement(ctx, output_buffer=pdf_buffer)
+                generate_pdf_statement(ctx, output_buffer=pdf_buffer)  # Use wrapper
                 pdf_filename = f"{selected_bank.lower()}_statement_{ctx['customer_account_number'][-4:]}.pdf"
                 st.session_state['statement_data'] = ctx
                 st.session_state['pdf_buffer'] = pdf_buffer
                 st.session_state['pdf_filename'] = pdf_filename
                 st.session_state['trigger_generate'] = False
-                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Statement generated for {selected_bank} with Dynamic Layout"]
-                st.success(f"Statement generated for {selected_bank} with Dynamic Layout")
+                st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Statement generated for {selected_bank}"]
+                st.success(f"Statement generated for {selected_bank}")
             except Exception as e:
                 st.error(f"Error generating statement: {str(e)}")
                 st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Error generating statement: {str(e)}"]

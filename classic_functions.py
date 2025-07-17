@@ -40,7 +40,7 @@ def wrap_text(c, text, font_name, font_size, max_width):
         lines.append(" ".join(current_line))
     return lines
 
-def check_page_break(c, y_position, margin, page_height, space_needed, font_name="Helvetica", font_size=12, is_table=False, headers=None, col_widths=None):
+def check_page_break(c, y_position, margin, page_height, space_needed, font_name="Helvetica", font_size=12, is_table=False, headers=None, col_widths=None, header_font=None):
     """
     Check if a page break is needed and reset canvas if necessary.
     
@@ -55,6 +55,7 @@ def check_page_break(c, y_position, margin, page_height, space_needed, font_name
         is_table (bool): Whether rendering a table (for header re-rendering).
         headers (list): Table headers, if applicable.
         col_widths (list): Column widths, if applicable.
+        header_font (str, optional): Font name for table headers, defaults to font_name.
     
     Returns:
         float: Updated y-position.
@@ -64,7 +65,8 @@ def check_page_break(c, y_position, margin, page_height, space_needed, font_name
         c.setFont(font_name, font_size)
         y_position = page_height - margin
         if is_table and headers and col_widths:
-            c.setFont(font_name, font_size)
+            header_font = header_font or font_name  # Use header_font if provided, else font_name
+            c.setFont(header_font, font_size)
             for i, header in enumerate(headers):
                 x_pos = margin + sum(col_widths[:i])
                 if i in [2, 3, 4]:  # Adjust for right-aligned columns

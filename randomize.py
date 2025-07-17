@@ -380,8 +380,10 @@ def generate_statement_data(bank_name, account_type="personal", num_transactions
             "total_pages": 1,
             "layout_style": "sequential" if random.randint(0, 1) == 0 else "two-column",
             "logo_position": random.choice(["left", "right", "center"]),
-            "sections": sections
+            "sections": sections,
+            "use_classic_template": random.random() < 0.2  # 20% chance to use a classic template
         }
+
 
         # Add Account Summary section
         sections.append({

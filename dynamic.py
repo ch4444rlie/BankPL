@@ -7,33 +7,65 @@ import random
 from PIL import Image
 from io import BytesIO
 import streamlit as st
-from classic_functions import wrap_text
+from classic_functions import wrap_text, check_page_break, create_citi_classic, create_chase_classic, create_wellsfargo_classic, create_pnc_classic
+
+def generate_pdf_statement(ctx, output_buffer):
+    """
+    Generate a PDF bank statement, choosing between dynamic or classic templates.
+    
+    Args:
+        ctx (dict): Context dictionary with statement data.
+        output_buffer (BytesIO): Buffer to write the PDF to.
+    
+    Raises:
+        ValueError: If required context keys are missing or bank_name is unsupported.
+    """
+    bank_name = ctx.get('bank_name', 'Unknown')
+    
+    if ctx.get('use_classic_template', False):
+        print(f"Using classic template for {bank_name}")
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Using classic template for {bank_name}"]
+        
+        classic_templates = {
+            "Citibank": create_citi_classic,
+            "Chase": create_chase_classic,
+            "Wells Fargo": create_wellsfargo_classic,
+            "PNC": create_pnc_classic
+        }
+        
+        if bank_name not in classic_templates:
+            raise ValueError(f"No classic template available for bank: {bank_name}")
+        
+        classic_templates[bank_name](ctx, output_buffer)
+    else:
+        print(f"Using dynamic template for {bank_name}")
+        st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Using dynamic template for {bank_name}"]
+        create_dynamic_statement(ctx, output_buffer)
 
 def create_dynamic_statement(ctx, output_buffer):
     """
     Generate a dynamic PDF bank statement with a single-column or two-column layout based on ctx['layout_style'].
     
     Args:
-        ctx (dict): Context dictionary with statement data and sections.
+        ctx (dict): Context dictionary with statement data.
         output_buffer (BytesIO): Buffer to write the PDF to.
     
     Raises:
         ValueError: If required context keys are missing.
     """
     try:
-        # Define bank_name early to avoid undefined variable error
         bank_name = ctx.get('bank_name', 'Unknown')
 
         # Validate ctx
         required_keys = ['bank_name', 'account_holder', 'account_holder_address', 'bank_address_lines', 
-                         'account_type', 'summary', 'transactions', 'website', 'contact', 'customer_account_number', 'logo_position']
+                        'account_type', 'summary', 'transactions', 'website', 'contact', 'customer_account_number', 'logo_position']
         for key in required_keys:
             if key not in ctx:
                 raise ValueError(f"Missing required context key: {key}")
         
         # Validate and calculate consistent summary from transactions
         transactions = ctx.get('transactions', [])
-        currency = ctx.get('currency', '$')  # Default to '$' if currency is missing
+        currency = ctx.get('currency', '$')
         beginning_balance = float(ctx['summary'].get('beginning_balance', '0.00').replace(currency, '').replace(',', ''))
         deposits_total = sum(float(t.get('deposits_credits', '0.00').replace(currency, '').replace(',', '')) for t in transactions if t.get('deposits_credits'))
         withdrawals_total = sum(float(t.get('withdrawals_debits', '0.00').replace(currency, '').replace(',', '')) for t in transactions if t.get('withdrawals_debits'))
@@ -45,7 +77,6 @@ def create_dynamic_statement(ctx, output_buffer):
                 running_balance -= float(t['withdrawals_debits'].replace(currency, '').replace(',', ''))
         ending_balance = running_balance
 
-        # Update summary with calculated values
         ctx['summary'] = {
             'beginning_balance': f"{currency}{beginning_balance:,.2f}",
             'deposits_total': f"{currency}{deposits_total:,.2f}",
@@ -64,7 +95,6 @@ def create_dynamic_statement(ctx, output_buffer):
             'interest_paid_ytd': ctx['summary'].get('interest_paid_ytd', f"{currency}0.00")
         }
 
-        # Validate transaction data
         transaction_keys = ['date', 'description', 'deposits_credits', 'withdrawals_debits', 'balance']
         for tx in transactions:
             for key in transaction_keys:
@@ -79,12 +109,10 @@ def create_dynamic_statement(ctx, output_buffer):
         usable_width = PAGE_WIDTH - 2 * margin
         y_position = PAGE_HEIGHT - margin
 
-        # Set simple document-wide text styles
         header_style = {"font": "Helvetica", "size": 12, "color": colors.black}
         doc_style = {"font": "Helvetica", "size": 10, "color": colors.black}
         footer_style = {"font": "Helvetica", "size": 9, "color": colors.black}
 
-        # Local helper function for text formatting
         def format_text(value, ctx):
             if isinstance(value, str):
                 try:
@@ -95,7 +123,6 @@ def create_dynamic_statement(ctx, output_buffer):
                     return value
             return str(value)
 
-        # Render Header with logo and addresses
         logo_position = ctx.get('logo_position', 'left')
         logo_path = ctx.get('logo_path', '')
         logo_width = 1.5 * inch
@@ -105,7 +132,6 @@ def create_dynamic_statement(ctx, output_buffer):
         elif logo_position == 'center':
             logo_x_position = (PAGE_WIDTH - logo_width) / 2
 
-        # Render logo
         if logo_path:
             try:
                 img_data = open(logo_path, 'rb').read()
@@ -114,10 +140,7 @@ def create_dynamic_statement(ctx, output_buffer):
                 target_width = logo_width
                 aspect_ratio = img_width / img_height if img_height > 0 else 1
                 target_height = target_width / aspect_ratio
-                if y_position - target_height - 10 < margin:
-                    c.showPage()
-                    y_position = PAGE_HEIGHT - margin
-                    c.setFont(doc_style["font"], doc_style["size"])
+                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, target_height + 10, doc_style["font"], doc_style["size"])
                 c.drawImage(logo_path, logo_x_position, y_position - target_height - 10, width=target_width, height=target_height, mask='auto')
                 y_position -= target_height + 10
                 st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Logo rendered for {bank_name} at {logo_position}"]
@@ -128,24 +151,21 @@ def create_dynamic_statement(ctx, output_buffer):
         else:
             y_position -= 20
 
-        # Add half a line space after logo
         y_position -= (doc_style["size"] + 12) / 2
 
-        # Determine bank and customer address positions
         bank_x_position = margin
-        customer_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
+        customer_x_position = PAGE_WIDTH - margin
         if logo_position == 'right':
-            bank_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
+            bank_x_position = PAGE_WIDTH - margin
             customer_x_position = margin
         elif logo_position == 'center':
             if random.randint(0, 1) == 0:
                 bank_x_position = margin
-                customer_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
+                customer_x_position = PAGE_WIDTH - margin
             else:
-                bank_x_position = PAGE_WIDTH - margin  # Changed to PAGE_WIDTH - margin for right alignment
+                bank_x_position = PAGE_WIDTH - margin
                 customer_x_position = margin
 
-        # Render bank and customer addresses on the same horizontal axis
         c.setFont(doc_style["font"], doc_style["size"])
         c.setFillColor(doc_style["color"])
         address_lines = format_text("{account_holder_address}", ctx).split(',')
@@ -160,24 +180,20 @@ def create_dynamic_statement(ctx, output_buffer):
                 c.showPage()
                 y_position = PAGE_HEIGHT - margin
                 c.setFont(doc_style["font"], doc_style["size"])
-            # Render bank address line
             bank_line = ctx.get('bank_address_lines', [''] * 3)[i]
-            if bank_x_position > PAGE_WIDTH / 2:  # Right side
+            if bank_x_position > PAGE_WIDTH / 2:
                 c.drawRightString(bank_x_position, y_position, format_text(bank_line, ctx))
-            else:  # Left side
+            else:
                 c.drawString(bank_x_position, y_position, format_text(bank_line, ctx))
-            # Render customer address line
             customer_line = customer_address_lines[i] if i < len(customer_address_lines) else ""
-            if customer_x_position > PAGE_WIDTH / 2:  # Right side
+            if customer_x_position > PAGE_WIDTH / 2:
                 c.drawRightString(customer_x_position, y_position, customer_line)
-            else:  # Left side
+            else:
                 c.drawString(customer_x_position, y_position, customer_line)
             y_position -= doc_style["size"] + 4
 
-        # Add two empty lines after addresses
         y_position -= 2 * (doc_style["size"] + 4)
 
-        # Determine layout style for body sections
         layout_style = ctx.get('layout_style', 'sequential')
         if layout_style == 'two-column':
             column_width = usable_width / 2 - 0.25 * inch
@@ -194,7 +210,6 @@ def create_dynamic_statement(ctx, output_buffer):
             right_y_position = y_position
             current_column = 'left'
 
-        # Render middle sections
         for section in ctx.get('sections', []):
             if section["title"] == "Bank Address":
                 continue
@@ -205,32 +220,20 @@ def create_dynamic_statement(ctx, output_buffer):
                 x_position = margin
                 y_position = left_y_position
 
-            if y_position - 16 < margin:
-                c.showPage()
-                y_position = PAGE_HEIGHT - margin
-                if layout_style == 'two-column':
-                    left_y_position = y_position
-                    right_y_position = y_position
-                    current_column = 'left'
-                    x_position = column_margin_left
-                else:
-                    left_y_position = y_position
-                    right_y_position = y_position
-
-            # Calculate height for Customer Service or Account Summary section box
+            y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 16, header_style["font"], header_style["size"])
+            
             box_height = 0
             if section["title"] in ["Customer Service", "Account Summary"]:
-                box_height += header_style["size"] + 4  # Title height
+                box_height += header_style["size"] + 4
                 for content in section["content"]:
                     if content["type"] == "text":
                         lines = wrap_text(c, format_text(content["value"], ctx), doc_style["font"], doc_style["size"], column_width)
                         box_height += len(lines) * (doc_style["size"] + 4)
                     elif content["type"] == "table":
                         data = content.get("data", [])
-                        box_height += len(data) * (doc_style["size"] + 4) + 12  # Table rows + spacing
-                box_height += 8  # Padding around content
+                        box_height += len(data) * (doc_style["size"] + 4) + 12
+                box_height += 8
 
-            # Draw colored box for Customer Service
             if section["title"] == "Customer Service":
                 c.setFillColor(colors.lightblue if bank_name in ["Chase", "Citibank"] else 
                               colors.lightcoral if bank_name == "Wells Fargo" else 
@@ -239,35 +242,31 @@ def create_dynamic_statement(ctx, output_buffer):
                 c.rect(x_position - 4, y_position - box_height + 24, sum(col_widths) + 8, box_height - 6, fill=1)
                 c.setFillColor(header_style["color"])
 
-            # Randomly choose decoration for Account Summary (box, colored box, or gridline)
             account_summary_decoration = None
             if section["title"] == "Account Summary":
                 account_summary_decoration = random.choice(["box", "colored_box", "gridline"])
 
-            # Draw box or colored box for Account Summary
             if section["title"] == "Account Summary" and account_summary_decoration in ["box", "colored_box"]:
                 col_widths = [column_width * w for w in [0.375, 0.625]] if layout_style == 'two-column' else [column_width * w for w in [0.375, 0.125]]
                 if account_summary_decoration == "colored_box":
                     c.setFillColor(colors.lightblue if bank_name in ["Chase", "Citibank"] else 
                                   colors.lightcoral if bank_name == "Wells Fargo" else 
                                   colors.lightsalmon)
-                    c.rect(x_position - 4, y_position - box_height - 30, sum(col_widths) + 8, box_height + 48, fill=1)
+                    c.rect(x_position - 4, y_position - box_height - 30, sum(col_widths) + 8, box_height + 42, fill=1)
                     c.setFillColor(header_style["color"])
-                else:  # box
+                else:
                     c.setStrokeColor(colors.black)
-                    c.rect(x_position - 4, y_position - box_height - 30, sum(col_widths) + 8, box_height + 48, fill=0)
+                    c.rect(x_position - 4, y_position - box_height - 30, sum(col_widths) + 8, box_height + 42, fill=0)
 
-            # Render section title
             c.setFont(header_style["font"], header_style["size"])
             c.setFillColor(header_style["color"])
             if section["title"] == "Transaction History":
-                # Split header into two columns: title on left, date range on right
                 c.drawString(x_position, y_position, section["title"])
                 date_range = format_text("{statement_period}", ctx)
-                c.setFont(header_style["font"], 10)  # Reduce font size for date range
+                c.setFont(header_style["font"], 10)
                 date_width = c.stringWidth(date_range, header_style["font"], 10)
                 c.drawString(x_position + column_width - date_width - 2, y_position, date_range)
-                c.setFont(header_style["font"], header_style["size"])  # Reset font size
+                c.setFont(header_style["font"], header_style["size"])
             else:
                 c.drawString(x_position, y_position, section["title"])
             y_position -= header_style["size"] + 4
@@ -278,18 +277,7 @@ def create_dynamic_statement(ctx, output_buffer):
                 if content["type"] == "text":
                     lines = wrap_text(c, format_text(content["value"], ctx), doc_style["font"], doc_style["size"], column_width)
                     for line in lines:
-                        if y_position - 10 < margin:
-                            c.showPage()
-                            y_position = PAGE_HEIGHT - margin
-                            if layout_style == 'two-column':
-                                left_y_position = y_position
-                                right_y_position = y_position
-                                current_column = 'left'
-                                x_position = column_margin_left
-                            else:
-                                left_y_position = y_position
-                                right_y_position = y_position
-                            c.setFont(doc_style["font"], doc_style["size"])
+                        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 10, doc_style["font"], doc_style["size"])
                         c.drawString(x_position, y_position, line)
                         y_position -= doc_style["size"] + 4
                 elif content["type"] == "table":
@@ -333,7 +321,6 @@ def create_dynamic_statement(ctx, output_buffer):
                     if not data and content.get("data_key"):
                         data = [["No data available", ""]]
 
-                    # Adjust col_widths for two-column layout for specific tables
                     col_widths = content.get("col_widths", [1/max(1, len(data[0]))]*len(data[0]))
                     if layout_style == 'two-column' and section["title"] in ["Customer Service", "Account Summary", "Daily Ending Balance"]:
                         col_widths = [0.375, 0.625]
@@ -343,7 +330,6 @@ def create_dynamic_statement(ctx, output_buffer):
 
                     headers = content.get("headers", [])
                     if headers:
-                        # Draw gray box for Transaction History headers
                         if content.get("data_key") == "transactions":
                             c.setFillColor(colors.lightgrey)
                             c.rect(x_position - 2, y_position - header_style["size"] + (doc_style["size"] + 5) / 2, sum(col_widths) + 4, header_style["size"] + 5, fill=1)
@@ -362,20 +348,9 @@ def create_dynamic_statement(ctx, output_buffer):
 
                     c.setFont(doc_style["font"], doc_style["size"])
                     c.setFillColor(doc_style["color"])
-                    row_y_positions = []  # For gridlines in Account Summary
+                    row_y_positions = []
                     for row_idx, row in enumerate(data):
-                        if y_position - 10 < margin:
-                            c.showPage()
-                            y_position = PAGE_HEIGHT - margin
-                            if layout_style == 'two-column':
-                                left_y_position = y_position
-                                right_y_position = y_position
-                                current_column = 'left'
-                                x_position = column_margin_left
-                            else:
-                                left_y_position = y_position
-                                right_y_position = y_position
-                            c.setFont(doc_style["font"], doc_style["size"])
+                        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 10, doc_style["font"], doc_style["size"], is_table=True, headers=headers, col_widths=col_widths)
                         row_y_positions.append(y_position)
                         for i, cell in enumerate(row):
                             if i < len(col_widths):
@@ -392,26 +367,20 @@ def create_dynamic_statement(ctx, output_buffer):
                         y_position -= doc_style["size"] + 4
                     y_position -= 12
 
-                    # Draw gridlines for Account Summary
                     if section["title"] == "Account Summary" and account_summary_decoration == "gridline":
                         c.setStrokeColor(colors.black)
-                        # Horizontal lines (between rows and at top/bottom, moved down by 0.25 line space)
                         for y in row_y_positions + [row_y_positions[0] + doc_style["size"] + 4]:
                             c.line(x_position, y - 3.5, x_position + sum(col_widths), y - 3.5)
-                        # Vertical line (centered)
                         c.line(x_position + sum(col_widths) / 2, row_y_positions[-1] - 3.5, x_position + sum(col_widths) / 2, row_y_positions[0] + doc_style["size"] + 4 - 3.5)
 
-                    # Draw horizontal divider line after Transaction History table
                     if content.get("data_key") == "transactions":
                         c.setStrokeColor(colors.black)
                         c.line(x_position, y_position + 16, x_position + sum(col_widths), y_position + 16)
 
-            # Add extra blank line space after Important Account Information
             y_position -= 12
             if section["title"] == "Important Account Information":
                 y_position -= doc_style["size"] + 4
 
-            # Update y_position for the current column
             if layout_style == 'two-column':
                 if current_column == 'left':
                     left_y_position = y_position
@@ -425,7 +394,6 @@ def create_dynamic_statement(ctx, output_buffer):
                 left_y_position = y_position
                 right_y_position = y_position
 
-        # Render Footer (full width)
         if min(left_y_position, right_y_position) - 60 < margin:
             c.showPage()
             left_y_position = PAGE_HEIGHT - margin
