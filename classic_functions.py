@@ -859,6 +859,7 @@ def create_wellsfargo_classic(ctx, output_buffer):
         st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Unexpected error in create_wellsfargo_classic: {str(e)}"]
         raise
 
+
 def create_pnc_classic(ctx, output_buffer):
     """
     Generate a PNC-style PDF statement.
@@ -1051,19 +1052,19 @@ def create_pnc_classic(ctx, output_buffer):
         c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('checks_written', "0"), ctx))
         y_position -= 12
         c.drawString(margin, y_position, "Check-card POS transactions")
-        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('pos_transactions', "0"), ctx))
+        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('pos_transactions', '0'), ctx))
         y_position -= 12
         c.drawString(margin, y_position, "Check-card/virtual POS PIN txn")
-        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('pos_pin_transactions', "0"), ctx))
+        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('pos_pin_transactions', '0'), ctx))
         y_position -= 12
         c.drawString(margin, y_position, "Total ATM transactions")
-        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('total_atm_transactions', "0"), ctx))
+        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('total_atm_transactions', '0'), ctx))
         y_position -= 12
         c.drawString(margin, y_position, "PNC Bank ATM transactions")
-        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('pnc_atm_transactions', "0"), ctx))
+        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('pnc_atm_transactions', '0'), ctx))
         y_position -= 12
         c.drawString(margin, y_position, "Other Bank ATM transactions")
-        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('other_atm_transactions', "0"), ctx))
+        c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx.get('summary', {}).get('other_atm_transactions', '0'), ctx))
         y_position -= 20
 
         c.setFont("Helvetica", 13)
@@ -1107,8 +1108,8 @@ def create_pnc_classic(ctx, output_buffer):
         c.drawString(margin, y_position, "Date")
         c.drawString(margin + 0.15 * usable_width, y_position, "Amount")
         c.drawString(margin + 0.35 * usable_width, y_position, "Description")
-        y_position -= 12
-        c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        y_position -= 11  # Keep adjustment from previous fix for spacing
+        # Removed: c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
         for deposit in ctx.get('deposits', []):
             y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 12, "Helvetica", 12)
             c.drawString(margin, y_position, format_text(deposit.get("date", ""), ctx))
@@ -1132,7 +1133,7 @@ def create_pnc_classic(ctx, output_buffer):
         c.drawString(margin + 0.15 * usable_width, y_position, "Amount")
         c.drawString(margin + 0.35 * usable_width, y_position, "Description")
         y_position -= 12
-        c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        # Removed: c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
         for withdrawal in ctx.get('withdrawals', []):
             y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 12, "Helvetica", 12)
             c.drawString(margin, y_position, format_text(withdrawal.get("date", ""), ctx))
