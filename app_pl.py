@@ -14,68 +14,70 @@ TRANSACTION_RANGE = (3, 25)  # Min and max number of transactions
 # Streamlit app configuration
 st.set_page_config(page_title="Dynamic Bank Statement Generator", page_icon="🏦", layout="wide", initial_sidebar_state="collapsed")
 
-# Custom CSS for centered elements, smaller 2-column sidebar buttons, and download button
+# Custom CSS for centered elements, responsive 2-column sidebar, and simplified download button
 st.markdown("""
 <style>
 .stButton > button {
     display: block;
-    margin: 20px auto;
-    width: 200px;
-    height: 50px;
-    font-size: 18px;
+    margin: 2vw auto;  /* Responsive margin */
+    width: 20vw;  /* Responsive width */
+    max-width: 200px;  /* Cap for large screens */
+    min-width: 150px;  /* Minimum for small screens */
+    height: 4vh;  /* Responsive height */
+    font-size: 1.2rem;  /* Responsive font */
     font-weight: bold;
     background-color: #4CAF50;
     color: white;
-    border-radius: 10px;
+    border-radius: 0.8rem;
 }
 .stButton > button:hover {
     background-color: #45a049;
 }
 .centered-title {
     text-align: center;
+    font-size: 2rem;  /* Responsive font */
 }
 .centered-subheader {
     text-align: center;
+    font-size: 1.5rem;
 }
 .centered-text {
     text-align: center;
-    font-size: 16px;
-    margin-top: 10px;
+    font-size: 1rem;
+    margin-top: 0.5rem;  /* Tighter spacing */
 }
 .sidebar .stButton > button {
     width: 100%;
-    height: 18px;  /* Reduced from 22px */
-    font-size: 9px;  /* Reduced from 10px */
-    margin: 1px 0;  /* Reduced from 2px */
-    padding: 0 4px;  /* Reduced from 6px */
+    height: 1.2rem;
+    font-size: 0.6rem;
+    margin: 0.1rem 0;
+    padding: 0 0.2rem;
     background-color: #f0f0f0;
     color: black;
-    border-radius: 3px;  /* Reduced from 4px */
+    border-radius: 0.2rem;
 }
 .sidebar .stButton > button:hover {
     background-color: #e0e0e0;
 }
 .sidebar .stSlider > div {
-    padding: 2px 0;  /* Reduced from 3px */
+    padding: 0.1rem 0;
 }
 .sidebar .stMarkdown, .sidebar .stHeader {
-    font-size: 11px;  /* Reduced from 12px */
-    margin-bottom: 1px;  /* Reduced from 2px */
+    font-size: 0.7rem;
+    margin-bottom: 0.1rem;
+}
+.sidebar .st-emotion-cache-1wmy9hl {
+    width: 33.33vw !important;  /* Sidebar width = 1/3 page */
+    min-width: 200px;
+    max-width: 400px;
 }
 .download-button-container .stDownloadButton > button {
     display: block;
-    margin: 20px auto;
-    width: 200px;
-    height: 50px;
-    font-size: 18px;
-    font-weight: bold;
-    background-color: #008CBA;
-    color: white;
-    border-radius: 10px;
-    text-align: center;
+    margin: 0.5rem auto;  /* Minimal margin for tight placement below Generate */
+    font-size: 1rem;  /* Match default Streamlit button style */
 }
 .download-button-container .stDownloadButton > button:hover {
-    background-color: #007399;
+    background-color: #e0e0e0;  /* Subtle hover effect */
 }
 </style>
 """, unsafe_allow_html=True)
@@ -198,12 +200,13 @@ if st.session_state['statement_data'] and st.session_state['pdf_buffer']:
     # Wrap download button in a div to ensure centering
     st.markdown('<div class="download-button-container">', unsafe_allow_html=True)
     st.download_button(
-        label=f"Download {st.session_state['selected_bank']} {st.session_state['account_type'].capitalize()} PDF",
+        label="Download as PDF",  # Updated label
         data=pdf_content,
         file_name=st.session_state['pdf_filename'],
         mime="application/pdf",
         key=f"pdf_download_{st.session_state['selected_bank']}_{st.session_state['account_type']}"
     )
+    st.markdown('<div class="centered-text">Want to customize the statement? Check out the sidebar options!</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     pdf_viewer(
         input=pdf_content,
@@ -213,6 +216,5 @@ if st.session_state['statement_data'] and st.session_state['pdf_buffer']:
         viewer_align="center",
         show_page_separator=True
     )
-    st.markdown('<div class="centered-text">Want to customize the statement? Check out the sidebar options!</div>', unsafe_allow_html=True)
 else:
     st.markdown('<div class="centered-text">Click "Generate" to create a random bank statement.</div>', unsafe_allow_html=True)

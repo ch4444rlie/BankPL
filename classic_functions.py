@@ -274,18 +274,27 @@ def create_citi_classic(ctx, output_buffer):
         y_position -= 24
 
         # Footer
-        footer_height = 4 + 3 * 9 + 12 + 8
+        footer_height = 4 + 3 * 9 + 12 + 8  # Original height calculation
+        footer_texts = [
+            "Citigroup UK Limited is authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority.",
+            "Our firm’s Financial Services Register number is 805574. Citibank UK Limited is a company limited by shares registered in England and Wales with registered address at Citigroup Centre, Canada Square, Canary Wharf, London E14 5LB.",
+            "© All rights reserved Citibank UK Limited 2021. CITI, the Arc Design & Citibank are registered service marks of Citigroup Inc. Calls may be monitored or recorded for training and service quality purposes. PNB FBD 132019."
+        ]
+
         y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, footer_height, "Helvetica", 7)
         c.setFillColor(colors.HexColor("#003e7e"))
         c.rect(margin, y_position, usable_width, 4, fill=1)
         y_position -= 8
         c.setFont("Helvetica", 7)
-        c.drawString(margin, y_position, "Citigroup UK Limited is authorised by the Prudential Regulation Authority and regulated by the Financial Conduct Authority and the Prudential Regulation Authority.")
-        y_position -= 8
-        c.drawString(margin, y_position, "Our firm’s Financial Services Register number is 805574. Citibank UK Limited is a company limited by shares registered in England and Wales with registered address at Citigroup Centre, Canada Square, Canary Wharf, London E14 5LB.")
-        y_position -= 8
-        c.drawString(margin, y_position, "© All rights reserved Citibank UK Limited 2021. CITI, the Arc Design & Citibank are registered service marks of Citigroup Inc. Calls may be monitored or recorded for training and service quality purposes. PNB FBD 132019.")
-        y_position -= 10
+
+        for text in footer_texts:
+            wrapped_lines = wrap_text(c, text, "Helvetica", 7, usable_width)
+            for line in wrapped_lines:
+                y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 8, "Helvetica", 7)
+                c.drawString(margin, y_position, line)
+                y_position -= 8
+
+        y_position -= 0  # Adjust for final spacing before the last line
         c.drawRightString(PAGE_WIDTH - margin, y_position, "Citibank")
 
         c.save()
