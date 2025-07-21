@@ -40,6 +40,10 @@ def wrap_text(c, text, font_name, font_size, max_width):
         lines.append(" ".join(current_line))
     return lines
 
+
+
+
+
 def check_page_break(c, y_position, margin, page_height, space_needed, font_name="Helvetica", font_size=12, is_table=False, headers=None, col_widths=None, header_font=None):
     """
     Check if a page break is needed and reset canvas if necessary.
@@ -75,6 +79,10 @@ def check_page_break(c, y_position, margin, page_height, space_needed, font_name
                     c.drawString(x_pos + 8, y_position, header)
             y_position -= font_size + 4
     return y_position
+
+
+
+
 
 def create_citi_classic(ctx, output_buffer):
     """
@@ -225,25 +233,28 @@ def create_citi_classic(ctx, output_buffer):
         c.drawRightString(PAGE_WIDTH - margin, y_position, f"Created on {format_text(ctx['statement_date'], ctx)}")
         y_position -= 12
 
+
+
         # Transactions Table
         col_widths = [0.15 * usable_width, 0.36 * usable_width, 0.12 * usable_width, 0.12 * usable_width, 0.12 * usable_width]
-        header_y = y_position
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 24, "Helvetica-Bold", 9)  # Ensure space for headers + gridlines
+        c.line(margin, y_position, PAGE_WIDTH - margin, y_position)  # First gridline (above headers)
+        header_y = y_position - 12  # Headers 12 points below first gridline
         c.setFont("Helvetica-Bold", 9)
         c.drawString(margin, header_y, "Date")
         c.drawString(margin + col_widths[0], header_y, "Information")
         c.drawRightString(margin + sum(col_widths[:3]), header_y, "Debit")
         c.drawRightString(margin + sum(col_widths[:4]), header_y, "Credit")
         c.drawRightString(PAGE_WIDTH - margin, header_y, "Balance")
-        y_position -= 12
+        y_position = header_y - 6  # Second gridline 6 points below headers
         c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
 
-        y_position -= 3  # Move middle gridline up by 3/4 line space (12 - 9 = 3)
-        c.setFont("Helvetica", 9)
+        y_position -= 12  # Space before Opening balance
+        c.setFont("Helvetica-Bold", 9)
         c.drawString(margin, y_position, "")
         c.drawString(margin + col_widths[0], y_position, "Opening balance")
         c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx['summary']['beginning_balance'], ctx))
-        y_position -= 12
-        c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        y_position -= 12  # Space before transaction rows
 
         for transaction in ctx.get('transactions', []):
             desc = transaction.get("description", "")
@@ -264,14 +275,15 @@ def create_citi_classic(ctx, output_buffer):
         c.drawRightString(margin + sum(col_widths[:3]), y_position, format_text(ctx['summary']['withdrawals_total'], ctx))
         c.drawRightString(margin + sum(col_widths[:4]), y_position, format_text(ctx['summary']['deposits_total'], ctx))
         c.drawRightString(PAGE_WIDTH - margin, y_position, format_text(ctx['summary']['ending_balance'], ctx))
-        y_position -= 18  # Move bottom gridline down by half line space (12 + 6 = 18)
+        y_position -= 6  # Gridline close to Total row
         c.line(margin, y_position, PAGE_WIDTH - margin, y_position)
+        y_position -= 12  # Added spacing to separate gridline from notice
 
         # Notice
-        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 24, "Helvetica", 9)
+        y_position = check_page_break(c, y_position, margin, PAGE_HEIGHT, 48, "Helvetica", 9)  # Increased from 40 to ensure clearance
         c.setFont("Helvetica", 9)
         c.drawCentredString(PAGE_WIDTH / 2, y_position, "This printout is for information purposes only. Your regular account statement of assets takes precedence.")
-        y_position -= 24
+        y_position -= 36  # Reduced from 40 to tighten placement
 
         # Footer
         footer_height = 4 + 3 * 9 + 12 + 8  # Original height calculation
@@ -305,6 +317,10 @@ def create_citi_classic(ctx, output_buffer):
     except Exception as e:
         st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Unexpected error in create_citi_classic: {str(e)}"]
         raise
+
+
+
+
 
 def create_chase_classic(ctx, output_buffer):
     """
@@ -597,6 +613,9 @@ def create_chase_classic(ctx, output_buffer):
         st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Unexpected error in create_chase_classic: {str(e)}"]
         raise
 
+
+
+
 def create_wellsfargo_classic(ctx, output_buffer):
     """
     Generate a Wells Fargo-style PDF statement.
@@ -867,6 +886,8 @@ def create_wellsfargo_classic(ctx, output_buffer):
     except Exception as e:
         st.session_state['logs'] = st.session_state.get('logs', []) + [f"[{datetime.now()}] Unexpected error in create_wellsfargo_classic: {str(e)}"]
         raise
+
+
 
 
 def create_pnc_classic(ctx, output_buffer):
